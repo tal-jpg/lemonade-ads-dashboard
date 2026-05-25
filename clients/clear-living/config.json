@@ -1,0 +1,13 @@
+{
+  "client_id": "clear-living",
+  "client_name": "Clear Living",
+  "type": "ecommerce",
+  "crm": "shopify",
+  "opportunity_stage": false,
+  "platforms": ["meta", "google"],
+  "currency": "USD",
+  "meta_ad_account_id": "TODO_PENDING_FROM_CLIENT",
+  "google_customer_id": "TODO_PENDING_FROM_CLIENT",
+  "shopify_store": "TODO_PENDING_FROM_CLIENT",
+  "campaigns": []
+}

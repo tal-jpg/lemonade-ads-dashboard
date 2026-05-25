@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "spend": "spend",
+    "leads": "actions[action_type=lead].value",
+    "purchases": "actions[action_type=purchase].value",
+    "sessions": "clicks",
+    "revenue": "action_values[action_type=purchase].value"
+  },
+  "google": {
+    "spend": "metrics.cost_micros",
+    "leads": "metrics.conversions",
+    "sessions": "metrics.clicks",
+    "revenue": "metrics.conversions_value"
+  }
+}

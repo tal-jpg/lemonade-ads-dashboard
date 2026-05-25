@@ -1,0 +1,12 @@
+{
+  "client_id": "thinkup",
+  "client_name": "Thinkup",
+  "type": "leads",
+  "crm": "hubspot",
+  "opportunity_stage": false,
+  "platforms": ["meta", "google"],
+  "currency": "USD",
+  "meta_ad_account_id": "TODO_PENDING_FROM_CLIENT",
+  "google_customer_id": "TODO_PENDING_FROM_CLIENT",
+  "campaigns": []
+}

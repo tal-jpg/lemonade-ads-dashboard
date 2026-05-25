@@ -1,0 +1,13 @@
+{
+  "client_id": "phytech",
+  "client_name": "Phytech",
+  "type": "leads",
+  "crm": "salesforce",
+  "opportunity_stage": true,
+  "opportunity_stage_label": "TODO_PENDING_FROM_SALESFORCE_ADMIN",
+  "platforms": ["meta", "google"],
+  "currency": "USD",
+  "meta_ad_account_id": "TODO_PENDING_FROM_CLIENT",
+  "google_customer_id": "TODO_PENDING_FROM_CLIENT",
+  "campaigns": []
+}

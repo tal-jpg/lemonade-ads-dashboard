@@ -1,0 +1,37 @@
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+auth/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Vercel
+node_modules/
+.vercel/
+.next/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local Claude state
+.claude/settings.local.json
