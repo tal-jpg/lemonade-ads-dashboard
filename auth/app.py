@@ -1,16 +1,15 @@
 """Lemonade Ads OAuth server.
 
-One-time setup tool. Run locally, click "Connect Meta" on the /connect
-page, approve in the popup, and the long-lived access token is written
-to auth/.env. The data layer reads from .env from then on.
+One-time setup tool. Run locally, click the connect buttons on the
+home page, approve in the browser, and tokens are written to auth/.env.
+The data layer reads from .env from then on.
 
     cd auth && pip install -r requirements.txt
     python app.py
     # open http://localhost:5000
 
-Each platform handler is intentionally self-contained — Meta lives here
-in full; Google (M1-T3), HubSpot (M3-T1), Shopify (M3-T2), and
-Salesforce (M3-T3) will be appended as the same one-shot pattern.
+Each platform handler is intentionally self-contained. HubSpot (M3-T1),
+Shopify (M3-T2), and Salesforce (M3-T3) will follow the same pattern.
 """
 from __future__ import annotations
 
@@ -35,6 +34,11 @@ META_TOKEN_URL = f"https://graph.facebook.com/{META_API_VERSION}/oauth/access_to
 META_DEBUG_URL = f"https://graph.facebook.com/{META_API_VERSION}/debug_token"
 META_SCOPES = "ads_read,business_management,read_insights"
 
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_TOKENINFO_URL = "https://oauth2.googleapis.com/tokeninfo"
+GOOGLE_SCOPES = "https://www.googleapis.com/auth/adwords"
+
 
 def _require(var: str) -> str:
     value = os.environ.get(var)
@@ -56,6 +60,11 @@ def index():
     meta_token = os.environ.get("META_ACCESS_TOKEN")
     meta_status = "Connected ✓" if meta_token else "Not connected"
     meta_color = "#1b8a3a" if meta_token else "#666"
+
+    google_token = os.environ.get("GOOGLE_REFRESH_TOKEN")
+    google_status = "Connected ✓" if google_token else "Not connected"
+    google_color = "#1b8a3a" if google_token else "#666"
+
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -72,7 +81,7 @@ def index():
     .btn {{ display: inline-block; padding: 0.55rem 1.1rem; border-radius: 6px;
             text-decoration: none; font-weight: 500; }}
     .btn-meta {{ background: #1877F2; color: #fff; }}
-    .btn-disabled {{ background: #eee; color: #888; pointer-events: none; }}
+    .btn-google {{ background: #fff; color: #444; border: 1px solid #ddd; }}
   </style>
 </head>
 <body>
@@ -84,8 +93,8 @@ def index():
   </div>
   <div class="platform">
     <h2>Google Ads</h2>
-    <p class="status">Pending (M1-T3)</p>
-    <span class="btn btn-disabled">Connect Google</span>
+    <p class="status" style="color: {google_color};">{google_status}</p>
+    <a class="btn btn-google" href="/auth/google/login">Connect Google</a>
   </div>
 </body>
 </html>"""
@@ -180,6 +189,91 @@ def meta_callback():
   </ul>
   <p>The MCP layer will re-exchange this token for a fresh 60-day token
      before it expires (no user interaction needed).</p>
+  <p><a href="/">← Back to connect page</a></p>
+</body></html>"""
+
+
+@app.route("/auth/google/login")
+def google_login():
+    state = secrets.token_urlsafe(24)
+    session["google_oauth_state"] = state
+    params = {
+        "client_id": _require("GOOGLE_CLIENT_ID"),
+        "redirect_uri": _require("GOOGLE_REDIRECT_URI"),
+        "scope": GOOGLE_SCOPES,
+        "response_type": "code",
+        "access_type": "offline",   # get refresh token
+        "prompt": "consent",        # always return refresh token, even if previously granted
+        "state": state,
+    }
+    return redirect(f"{GOOGLE_AUTH_URL}?{urlencode(params)}")
+
+
+@app.route("/auth/google/callback")
+def google_callback():
+    if "error" in request.args:
+        desc = request.args.get("error_description", request.args["error"])
+        return f"<h1>Google returned an error</h1><p>{desc}</p>", 400
+
+    code = request.args.get("code")
+    state = request.args.get("state")
+    expected_state = session.pop("google_oauth_state", None)
+    if not code:
+        return "<h1>Missing authorization code from Google.</h1>", 400
+    if not expected_state or state != expected_state:
+        return "<h1>Invalid OAuth state — possible CSRF, aborting.</h1>", 400
+
+    resp = requests.post(
+        GOOGLE_TOKEN_URL,
+        data={
+            "code": code,
+            "client_id": _require("GOOGLE_CLIENT_ID"),
+            "client_secret": _require("GOOGLE_CLIENT_SECRET"),
+            "redirect_uri": _require("GOOGLE_REDIRECT_URI"),
+            "grant_type": "authorization_code",
+        },
+        timeout=15,
+    )
+    if not resp.ok:
+        return f"<h1>Google token exchange failed</h1><pre>{resp.text}</pre>", 502
+    payload = resp.json()
+
+    refresh_token = payload.get("refresh_token")
+    access_token = payload.get("access_token")
+    if not refresh_token:
+        return (
+            "<h1>No refresh token returned</h1>"
+            "<p>Revoke access at <a href='https://myaccount.google.com/permissions'>"
+            "myaccount.google.com/permissions</a> and try again.</p>",
+            502,
+        )
+
+    _save_to_env("GOOGLE_REFRESH_TOKEN", refresh_token)
+    _save_to_env("GOOGLE_ACCESS_TOKEN", access_token)
+
+    info_resp = requests.get(
+        GOOGLE_TOKENINFO_URL, params={"access_token": access_token}, timeout=15
+    )
+    info = info_resp.json() if info_resp.ok else {}
+    email = info.get("email", "(unknown)")
+    scopes = info.get("scope", "(unknown)")
+    expires_in = payload.get("expires_in", 3600)
+
+    return f"""<!doctype html>
+<html><head><title>Google connected</title>
+<style>body {{ font-family: -apple-system, sans-serif; max-width: 640px;
+               margin: 4rem auto; padding: 0 1.5rem; }}
+        code {{ background: #f4f4f4; padding: 0.15rem 0.35rem; border-radius: 4px; }}</style>
+</head><body>
+  <h1>Google Ads connected ✓</h1>
+  <p>Refresh token saved to <code>auth/.env</code>.</p>
+  <ul>
+    <li><strong>Account:</strong> {email}</li>
+    <li><strong>Scopes:</strong> {scopes}</li>
+    <li><strong>Access token lifetime:</strong> {expires_in // 60} min (refresh token is permanent)</li>
+  </ul>
+  <p>The MCP layer uses the refresh token to obtain a fresh access token
+     on every dashboard generation run — no user action needed.</p>
   <p><a href="/">← Back to connect page</a></p>
 </body></html>"""
 
