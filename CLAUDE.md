@@ -12,7 +12,7 @@ A fully automated reporting system for 4 agency clients. The user opens Claude C
 
 You then:
 1. Read `/clients/{client_id}/config.json` and `/clients/{client_id}/metric_map.json`
-2. Call the Meta Ads MCP and Google Ads MCP for the selected date range AND the previous period
+2. Call `mcps/meta_client.py` and `mcps/google_client.py` for the selected date range AND the previous period
 3. Call the client's CRM (HubSpot / Shopify / Salesforce) for deals + revenue
 4. Calculate every metric from raw totals (never average of averages, never platform-reported averages)
 5. Fill `/templates/dashboard_template.html` with the calculated data
@@ -44,8 +44,13 @@ Phytech is the only client with an extra Opportunity step in the funnel (Session
     metric_map.json              ← how to translate raw API fields into our metrics
     dashboard.html               ← generated output (overwrite on each run)
 /templates/dashboard_template.html
-/auth/                           ← Flask OAuth server (one-time setup, local + ngrok)
-/mcps/                           ← MCP configuration + shared helpers
+/auth/                           ← Flask OAuth server (one-time token setup)
+    app.py                       ← /connect page + Meta + Google OAuth callbacks
+    .env                         ← tokens (gitignored)
+/mcps/                           ← data-source clients (direct REST, no MCP servers)
+    meta_client.py               ← Meta Graph API → campaign insights
+    google_client.py             ← Google Ads REST API → campaign metrics
+    date_utils.py                ← preset date-range helpers (M1-T7)
 /management/dashboard.html       ← internal team view, all clients
 /vercel.json                     ← routing
 ```
@@ -115,8 +120,8 @@ When the user asks "generate {client} dashboard for {range}":
 2. Read `/clients/{client_id}/config.json` and `/clients/{client_id}/metric_map.json`.
 3. For each preset range (yesterday, 7d, 14d, 30d, 90d):
    a. Compute `current` and `previous` date windows.
-   b. Pull Meta data (campaigns in `config.campaigns` with platform=meta).
-   c. Pull Google data (campaigns with platform=google).
+   b. `mcps.meta_client.fetch_campaign_insights(account, since, until)`.
+   c. `mcps.google_client.fetch_campaign_insights(customer_id, since, until)`.
    d. Pull CRM data per `config.crm` for the same windows.
    e. Apply `metric_map.json` to normalise field names.
    f. Compute totals + per-campaign metrics using the calculation rules.
