@@ -1,0 +1,200 @@
+[
+  {
+    "slug": "novabank",
+    "name": "NovaBank",
+    "industry": "fintech",
+    "city": "London",
+    "size": "500–1,000",
+    "mark": "N",
+    "color": "#4F46B8",
+    "about": "NovaBank is a UK digital bank building fair, transparent everyday banking. Engineering-led, hybrid-first, with squads owning products end to end.",
+    "country": "UK"
+  },
+  {
+    "slug": "thames-logistics",
+    "name": "Thames Logistics",
+    "industry": "manufacturing",
+    "city": "Leeds",
+    "size": "200–500",
+    "mark": "T",
+    "color": "#12805C",
+    "about": "Thames Logistics runs distribution and fulfilment for UK retailers from five sites across the North and Midlands. People stay because progression is real: most site leaders started on the floor.",
+    "country": "UK"
+  },
+  {
+    "slug": "brightcare-group",
+    "name": "BrightCare Group",
+    "industry": "healthcare-and-life-sciences",
+    "city": "Manchester",
+    "size": "1,000+",
+    "mark": "B",
+    "color": "#C0392B",
+    "about": "BrightCare operates 40 care homes and a growing home-care service across the North West. CQC-rated Good or Outstanding in 92% of services.",
+    "country": "UK"
+  },
+  {
+    "slug": "kelpie-energy",
+    "name": "Kelpie Energy",
+    "industry": "energy",
+    "city": "Edinburgh",
+    "size": "200–500",
+    "mark": "K",
+    "color": "#1F6FB2",
+    "about": "Kelpie Energy develops and operates onshore wind and battery storage across Scotland. Engineering, project delivery and commercial teams hybrid out of Edinburgh.",
+    "country": "UK"
+  },
+  {
+    "slug": "harper-and-vale",
+    "name": "Harper & Vale",
+    "industry": "professional-services",
+    "city": "Birmingham",
+    "size": "50–200",
+    "mark": "H",
+    "color": "#B26A00",
+    "about": "Harper & Vale is a regional law firm known for commercial property and private client work — and for actually meaning it about work-life balance.",
+    "country": "UK"
+  },
+  {
+    "slug": "plumline",
+    "name": "Plumline",
+    "industry": "retail-and-ecommerce",
+    "city": "Bristol",
+    "size": "50–200",
+    "mark": "P",
+    "color": "#6F66D6",
+    "about": "Plumline is a direct-to-consumer homeware brand selling across the UK and EU. Small teams, big ownership, quarterly profit-share.",
+    "country": "UK"
+  },
+  {
+    "slug": "orchard-schools-trust",
+    "name": "Orchard Schools Trust",
+    "industry": "public-sector",
+    "city": "Nottingham",
+    "size": "1,000+",
+    "mark": "O",
+    "color": "#12805C",
+    "about": "A multi-academy trust of 14 primary and secondary schools across the East Midlands, with a shared curriculum team and genuine ECT support.",
+    "country": "UK"
+  },
+  {
+    "slug": "ferrocast",
+    "name": "Ferrocast Engineering",
+    "industry": "manufacturing",
+    "city": "Sheffield",
+    "size": "200–500",
+    "mark": "F",
+    "color": "#3F4054",
+    "about": "Precision castings and machined components for rail and energy. Apprenticeship-grown workforce; day shift and continental patterns.",
+    "country": "UK"
+  },
+  {
+    "slug": "citymed-partners",
+    "name": "CityMed Partners",
+    "industry": "healthcare-and-life-sciences",
+    "city": "London",
+    "size": "200–500",
+    "mark": "C",
+    "color": "#1F6FB2",
+    "about": "Private GP and occupational health provider serving London employers, with clinics in the City, Canary Wharf and Westfield.",
+    "country": "UK"
+  },
+  {
+    "slug": "meridian-media",
+    "name": "Meridian Media",
+    "industry": "media",
+    "city": "Manchester",
+    "size": "50–200",
+    "mark": "M",
+    "color": "#C0392B",
+    "about": "Meridian produces digital content and podcasts for UK brands, with an in-house paid-media team trading seven figures annually.",
+    "country": "UK"
+  },
+  {
+    "slug": "grayline-construct",
+    "name": "Grayline Construct",
+    "industry": "energy",
+    "city": "Cardiff",
+    "size": "200–500",
+    "mark": "G",
+    "color": "#B26A00",
+    "about": "Main contractor delivering commercial and infrastructure projects across Wales and the South West. Frameworks with two water companies and the Welsh Government.",
+    "country": "UK"
+  },
+  {
+    "slug": "fintor",
+    "name": "Fintor",
+    "industry": "fintech",
+    "city": "Remote",
+    "size": "50–200",
+    "mark": "F",
+    "color": "#4F46B8",
+    "about": "Fintor builds accounting automation for UK SMEs. Remote-first with quarterly meetups; salaries published on every role since day one.",
+    "country": "UK"
+  },
+  {
+    "slug": "hudson-analytics",
+    "name": "Hudson Analytics",
+    "industry": "fintech",
+    "city": "New York",
+    "size": "200–500",
+    "mark": "H",
+    "color": "#4F46B8",
+    "country": "US",
+    "about": "Hudson Analytics builds risk and fraud tooling for US banks and fintechs. NYC-hybrid engineering and data teams; every posting carries a published pay range."
+  },
+  {
+    "slug": "goldengate-health",
+    "name": "GoldenGate Health",
+    "industry": "healthcare-and-life-sciences",
+    "city": "San Francisco",
+    "size": "1,000+",
+    "mark": "G",
+    "color": "#12805C",
+    "country": "US",
+    "about": "GoldenGate Health operates outpatient clinics across California and Washington, with clinical, operations and telehealth teams hiring year-round."
+  },
+  {
+    "slug": "lonestar-logistics",
+    "name": "Lonestar Logistics",
+    "industry": "manufacturing",
+    "city": "Austin",
+    "size": "500–1,000",
+    "mark": "L",
+    "color": "#B26A00",
+    "country": "US",
+    "about": "Lonestar runs fulfillment and freight across Texas and the Southeast. Floor-to-leadership progression is real — most site directors started on a forklift."
+  },
+  {
+    "slug": "beacon-hill-legal",
+    "name": "Beacon Hill Legal",
+    "industry": "professional-services",
+    "city": "Boston",
+    "size": "50–200",
+    "mark": "B",
+    "color": "#1F6FB2",
+    "country": "US",
+    "about": "A Boston litigation and corporate boutique known for actually sustainable billable targets and real mentorship for associates and paralegals."
+  },
+  {
+    "slug": "cascade-renewables",
+    "name": "Cascade Renewables",
+    "industry": "energy",
+    "city": "Seattle",
+    "size": "200–500",
+    "mark": "C",
+    "color": "#12805C",
+    "country": "US",
+    "about": "Cascade develops wind, solar and storage across the Pacific Northwest and Mountain West. Engineering, project delivery and commercial teams, Seattle-hybrid."
+  },
+  {
+    "slug": "peachtree-media",
+    "name": "Peachtree Media",
+    "industry": "media",
+    "city": "Atlanta",
+    "size": "50–200",
+    "mark": "P",
+    "color": "#C0392B",
+    "country": "US",
+    "about": "Peachtree produces branded content and paid social for consumer brands, with an in-house media team trading eight figures annually."
+  }
+]

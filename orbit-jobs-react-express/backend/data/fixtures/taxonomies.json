@@ -1,0 +1,670 @@
+{
+  "specialisms": [
+    {
+      "slug": "technology",
+      "name": "Technology",
+      "tint": "#EDEBFB",
+      "intro": "From junior support analysts to principal engineers, technology is the UK's most active hiring market. Orbit Jobs brings software, data, infrastructure and product roles from every major source into one search — with salaries shown wherever they exist.",
+      "popularTitles": [
+        {
+          "t": "Software Engineer",
+          "d": "Designs, builds and ships applications and services. UK demand spans Python, TypeScript, Java and C#, with hybrid working now the default in most teams."
+        },
+        {
+          "t": "Data Analyst",
+          "d": "Turns raw data into decisions — SQL, dashboards and stakeholder storytelling. A common entry route into data careers with strong progression to analytics engineering."
+        },
+        {
+          "t": "DevOps Engineer",
+          "d": "Owns build pipelines, cloud infrastructure and reliability. AWS and Azure experience command a premium across the UK market."
+        },
+        {
+          "t": "IT Support Analyst",
+          "d": "First and second-line support keeping businesses running. The classic technology career entry point, hiring in every UK region."
+        },
+        {
+          "t": "Product Manager",
+          "d": "Sets direction and priorities for product teams. Employers increasingly ask for evidence of shipped outcomes rather than certifications."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Do I need a degree to get a technology job?",
+          "a": "Increasingly, no. Many UK employers now hire on demonstrable skills — portfolios, open-source work and bootcamp projects — especially for engineering and support roles. Senior roles weight experience over education almost entirely.",
+          "ukOnly": false
+        },
+        {
+          "q": "What does hybrid working look like in UK tech?",
+          "a": "Most technology employers advertise two to three office days a week. Fully remote roles still exist but are more competitive; use the Work model filter to see only remote roles.",
+          "ukOnly": false
+        },
+        {
+          "q": "Are advertised salary ranges negotiable?",
+          "a": "Usually. Ranges reflect the budgeted band; where you land depends on interview performance and experience. Roles on Orbit Jobs show the range wherever the employer or source discloses it.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "From help-desk analysts to staff engineers, technology is the largest hiring market in the US. Orbit Jobs brings software, data, cloud and product roles from every major source into one search — with pay ranges shown wherever they exist, as several states now require."
+    },
+    {
+      "slug": "finance-and-accounting",
+      "name": "Finance & Accounting",
+      "tint": "#FFF6DE",
+      "intro": "Finance hiring in the UK runs from practice accountancy and payroll through to FP&A and finance leadership. Qualifications (ACA, ACCA, CIMA) still structure the market, and study support remains one of the most-searched benefits.",
+      "popularTitles": [
+        {
+          "t": "Accounts Assistant",
+          "d": "Ledgers, reconciliations and invoice processing. The standard entry route into industry finance, often with study support toward AAT or ACCA."
+        },
+        {
+          "t": "Management Accountant",
+          "d": "Month-end, budgeting and business partnering. Typically part-qualified to newly qualified CIMA/ACCA."
+        },
+        {
+          "t": "Financial Controller",
+          "d": "Owns the numbers: reporting, controls, audit and a small team. The stepping stone between senior accountant and finance director."
+        },
+        {
+          "t": "Payroll Specialist",
+          "d": "Runs accurate, compliant payroll. Consistently in demand and resilient to economic cycles."
+        },
+        {
+          "t": "Finance Analyst",
+          "d": "Modelling, forecasting and insight for decision-makers. Excel remains the entry test; SQL and Power BI increasingly differentiate candidates."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Part-qualified — is it worth moving now?",
+          "a": "Part-qualified moves are common and often well paid, especially into management accounting. Look for roles advertising study support, which most industry employers on Orbit Jobs include in the description.",
+          "ukOnly": false
+        },
+        {
+          "q": "Practice or industry?",
+          "a": "Practice (accountancy firms) offers breadth and a respected training ground; industry offers depth in one business and usually better early pay. Movement from practice to industry around qualification is the most common UK path.",
+          "ukOnly": true
+        },
+        {
+          "q": "Do finance roles disclose salary?",
+          "a": "More than most fields. Use the 'Only show jobs with disclosed salary' toggle to filter to transparent listings.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "US finance hiring runs from AP/AR and payroll through FP&A to controllership. CPA licensure structures the senior market, and hybrid schedules are now standard across corporate finance teams."
+    },
+    {
+      "slug": "sales",
+      "name": "Sales",
+      "tint": "#E8F5EF",
+      "intro": "Sales roles across the UK — SDRs, account executives, account managers and sales leadership — with on-target earnings shown wherever disclosed. Base-plus-commission structures vary widely, so read the salary line carefully.",
+      "popularTitles": [
+        {
+          "t": "Sales Development Representative",
+          "d": "Outbound prospecting and qualification. The proven entry into technology and B2B sales, with fast progression to closing roles."
+        },
+        {
+          "t": "Account Executive",
+          "d": "Owns deals end-to-end. OTE typically splits 50/50 between base and commission in UK SaaS."
+        },
+        {
+          "t": "Account Manager",
+          "d": "Grows existing customer relationships and renewals. Suits relationship-builders over hunters."
+        },
+        {
+          "t": "Business Development Manager",
+          "d": "New-business focus in field or hybrid settings, common across logistics, media and professional services."
+        },
+        {
+          "t": "Head of Sales",
+          "d": "Builds the team, the number and the process. Employers want evidence of quota attainment and hiring."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "What does OTE mean on a listing?",
+          "a": "On-target earnings: base salary plus the commission you'd earn at 100% of quota. Orbit Jobs shows the base range where the employer discloses it and flags OTE in the description.",
+          "ukOnly": false
+        },
+        {
+          "q": "Is sales experience transferable between industries?",
+          "a": "Largely yes — process and pipeline discipline travel well. Expect a short ramp on product knowledge; employers care most about verifiable performance.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "SDRs, account executives and sales leadership across the US — with on-target earnings flagged in descriptions. Base-plus-commission splits vary widely between SaaS, media and field sales."
+    },
+    {
+      "slug": "marketing",
+      "name": "Marketing",
+      "tint": "#FDECEF",
+      "intro": "Digital, brand, content and growth roles across the UK. Performance marketing and marketing analytics are the fastest-growing corners of the market, and portfolios increasingly beat CVs for creative roles.",
+      "popularTitles": [
+        {
+          "t": "Marketing Executive",
+          "d": "The generalist entry role: campaigns, content, events and reporting. Usually the fastest way to discover a specialism."
+        },
+        {
+          "t": "Digital Marketing Manager",
+          "d": "Owns paid and organic channels with budget responsibility. Google and Meta platform experience are the standard asks."
+        },
+        {
+          "t": "Content Writer",
+          "d": "Blogs, landing pages and email. SEO literacy is now assumed; strong portfolios win interviews."
+        },
+        {
+          "t": "Performance Marketing Manager",
+          "d": "Paid search and paid social with a measurable ROAS target. One of the most in-demand marketing skill sets in the UK."
+        },
+        {
+          "t": "Head of Marketing",
+          "d": "Strategy, team and budget. SMEs often combine brand and demand generation in one role."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Agency or in-house?",
+          "a": "Agency gives pace and breadth across clients; in-house gives depth and ownership of outcomes. Salaries converge at mid-level; leadership pay is usually higher in-house.",
+          "ukOnly": false
+        },
+        {
+          "q": "Which marketing skills are most in demand?",
+          "a": "Paid media buying, marketing analytics (GA4, attribution), CRM/email automation and SEO. Listings on Orbit Jobs are searchable by these keywords.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "Growth, brand, content and lifecycle roles across the US market. Performance marketing and marketing analytics remain the fastest-growing corners, and portfolios beat résumés for creative roles."
+    },
+    {
+      "slug": "engineering",
+      "name": "Engineering",
+      "tint": "#E9F1FB",
+      "intro": "Mechanical, electrical, civil and manufacturing engineering roles across the UK's industrial heartlands. Chartership (CEng/IEng) shapes senior pay, and contract day-rates remain strong in infrastructure.",
+      "popularTitles": [
+        {
+          "t": "Mechanical Design Engineer",
+          "d": "CAD-led design for products and plant. SolidWorks and Inventor are the most-requested tools."
+        },
+        {
+          "t": "Electrical Engineer",
+          "d": "Power, control and building services. 18th Edition and HV experience carry premiums."
+        },
+        {
+          "t": "Civil Engineer",
+          "d": "Infrastructure, highways and water. Strong graduate intake and clear chartership pathways."
+        },
+        {
+          "t": "Maintenance Engineer",
+          "d": "Keeps production running — multi-skilled mechanical/electrical shifts across UK manufacturing."
+        },
+        {
+          "t": "Quality Engineer",
+          "d": "Root-cause, audits and supplier quality. Automotive and aerospace drive demand."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "How much does chartership matter?",
+          "a": "For consultancy and senior infrastructure roles, a great deal — it gates signing authority and pay bands. In manufacturing, demonstrable experience often matters more.",
+          "ukOnly": false
+        },
+        {
+          "q": "Are engineering contracts inside or outside IR35?",
+          "a": "Both exist. Each contract listing on Orbit Jobs states the arrangement in the description where the employer or source provides it.",
+          "ukOnly": true
+        }
+      ],
+      "intro_us": "Mechanical, electrical, civil and manufacturing engineering across the US industrial base. PE licensure gates signing authority in civil and structural work; advanced manufacturing keeps the Midwest and South hiring."
+    },
+    {
+      "slug": "healthcare",
+      "name": "Healthcare",
+      "tint": "#E8F5EF",
+      "intro": "Nursing, allied health, care and healthcare management roles across the NHS and private sector. Band structures make NHS pay transparent; private-sector listings on Orbit Jobs are nudged toward the same clarity.",
+      "popularTitles": [
+        {
+          "t": "Registered Nurse",
+          "d": "NMC-registered adult, mental health and community nursing. Bands 5–6 dominate advertised vacancies."
+        },
+        {
+          "t": "Healthcare Assistant",
+          "d": "Hands-on patient care in hospitals and the community. The largest single entry route into UK healthcare."
+        },
+        {
+          "t": "Physiotherapist",
+          "d": "HCPC-registered roles across NHS, private practice and sport."
+        },
+        {
+          "t": "Care Home Manager",
+          "d": "Registered manager roles with CQC accountability. Consistent demand nationwide."
+        },
+        {
+          "t": "Clinical Pharmacist",
+          "d": "Hospital, community and increasingly primary-care network roles."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Do NHS roles show salary?",
+          "a": "Yes — NHS listings carry Agenda for Change bands, and Orbit Jobs displays the band's range. Private-sector healthcare listings vary; use the disclosed-salary filter if pay clarity matters to you.",
+          "ukOnly": true
+        },
+        {
+          "q": "Is sponsorship available for healthcare roles?",
+          "a": "Many UK healthcare employers hold sponsor licences. Where a listing states sponsorship availability it appears in the description; a dedicated filter is planned.",
+          "ukOnly": true
+        }
+      ],
+      "intro_us": "Nursing, allied health and healthcare operations across hospital systems and private providers. State licensure and compact rules shape mobility; pay transparency laws increasingly put ranges on listings."
+    },
+    {
+      "slug": "human-resources",
+      "name": "Human Resources",
+      "tint": "#F3E9FB",
+      "intro": "HR administration through to people leadership, with CIPD levels structuring the market. Employee relations and HR systems (Workday, SAP) experience are the strongest current differentiators.",
+      "popularTitles": [
+        {
+          "t": "HR Administrator",
+          "d": "The entry role: contracts, onboarding and HRIS upkeep, often with CIPD Level 3 support."
+        },
+        {
+          "t": "HR Advisor",
+          "d": "First-line ER casework and manager coaching. CIPD Level 5 is the common ask."
+        },
+        {
+          "t": "Talent Acquisition Specialist",
+          "d": "In-house recruitment across volume and specialist hiring."
+        },
+        {
+          "t": "HR Business Partner",
+          "d": "Strategic partnering with business units; ER depth plus commercial judgement."
+        },
+        {
+          "t": "Head of People",
+          "d": "Owns the people agenda in SMEs and scale-ups — culture, reward, compliance and systems."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "How important is CIPD?",
+          "a": "Below Level 5, experience competes well; at advisor level and above most employers list CIPD 5 as essential or strongly preferred. Many fund study — check the benefits line.",
+          "ukOnly": true
+        }
+      ],
+      "intro_us": "HR generalists through people leadership, with SHRM and HRCI certifications carrying weight. HRIS (Workday) experience and multi-state employment-law fluency are the strongest differentiators."
+    },
+    {
+      "slug": "operations-and-supply-chain",
+      "name": "Operations & Supply Chain",
+      "tint": "#FFF6DE",
+      "intro": "Warehouse, logistics, procurement and operations management roles. The UK's distribution spine — the Midlands 'golden triangle', northern hubs and port cities — drives constant volume.",
+      "popularTitles": [
+        {
+          "t": "Warehouse Operative",
+          "d": "Picking, packing and goods-in across shifts. Immediate starts are common."
+        },
+        {
+          "t": "Supply Chain Analyst",
+          "d": "Forecasting, inventory and S&OP support. Excel and ERP literacy required."
+        },
+        {
+          "t": "Procurement Manager",
+          "d": "Category ownership and supplier negotiation. CIPS qualifications carry weight."
+        },
+        {
+          "t": "Operations Manager",
+          "d": "Runs sites and teams against service and cost KPIs."
+        },
+        {
+          "t": "Transport Planner",
+          "d": "Routing, compliance and carrier management; CPC holders in demand."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Are shift premiums included in advertised pay?",
+          "a": "Practice varies. Orbit Jobs shows the base rate the source provides; premium details sit in the description. We nudge direct employers to state total earning potential.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "Warehouse, logistics, procurement and operations management roles across the US distribution network — from the Inland Empire to the Sun Belt's new build-outs."
+    },
+    {
+      "slug": "legal",
+      "name": "Legal",
+      "tint": "#E9F1FB",
+      "intro": "Solicitors, paralegals, legal operations and in-house counsel. PQE bands anchor private-practice pay; in-house hiring keeps growing as companies internalise legal spend.",
+      "popularTitles": [
+        {
+          "t": "Paralegal",
+          "d": "Case support across practice areas — often the proving ground before a training contract."
+        },
+        {
+          "t": "Commercial Solicitor",
+          "d": "Contracts, IT/IP and data work, 2–6 PQE most in demand."
+        },
+        {
+          "t": "Conveyancer",
+          "d": "Residential property specialists, hiring in every region."
+        },
+        {
+          "t": "In-house Counsel",
+          "d": "Sole counsel and small-team roles in scale-ups and mid-market companies."
+        },
+        {
+          "t": "Compliance Officer",
+          "d": "FCA-regulated firms drive steady demand; SMCR experience valued."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "What does PQE mean on listings?",
+          "a": "Post-qualification experience — years since admission as a solicitor. It is a banding convention, not a legal requirement; strong candidates outside a stated band are often considered.",
+          "ukOnly": true
+        }
+      ],
+      "intro_us": "Attorneys, paralegals and compliance across firms and in-house teams. Bar admission is state-by-state; in-house hiring keeps growing as companies internalize legal spend."
+    },
+    {
+      "slug": "customer-experience",
+      "name": "Customer Experience",
+      "tint": "#FDECEF",
+      "intro": "Customer service, success and support roles — the UK's biggest hybrid/remote-friendly job family. Progression into team leadership, operations and customer success is faster than most fields.",
+      "popularTitles": [
+        {
+          "t": "Customer Service Advisor",
+          "d": "Phone, chat and email support. Remote and hybrid options are widespread."
+        },
+        {
+          "t": "Customer Success Manager",
+          "d": "Owns onboarding, adoption and renewals for B2B accounts."
+        },
+        {
+          "t": "Team Leader",
+          "d": "Coaches advisor teams against quality and CSAT targets."
+        },
+        {
+          "t": "Complaints Handler",
+          "d": "Regulated-sector complaint resolution; FCA experience valued in financial services."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Are remote customer service jobs real?",
+          "a": "Yes — it is the field with the highest share of genuinely remote UK roles. Filter Work model to Remote to see them; equipment and connectivity requirements appear in descriptions.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "Support, success and CX operations — the most remote-friendly job family in the US. Progression into team leadership and operations is faster than most fields."
+    },
+    {
+      "slug": "education",
+      "name": "Education",
+      "tint": "#E8F5EF",
+      "intro": "Teaching, support and leadership roles across schools, colleges and early years. Term-time patterns, pay scales and ECT support are stated on listings wherever sources provide them.",
+      "popularTitles": [
+        {
+          "t": "Primary Teacher",
+          "d": "Class teaching across KS1/KS2; ECTs welcome on many listings."
+        },
+        {
+          "t": "Teaching Assistant",
+          "d": "Classroom and SEN support — the largest support-role category in UK education."
+        },
+        {
+          "t": "Secondary Maths Teacher",
+          "d": "A national shortage subject with recruitment incentives."
+        },
+        {
+          "t": "SENCO",
+          "d": "Leads special educational needs provision; NASENCO award typically required."
+        },
+        {
+          "t": "Nursery Practitioner",
+          "d": "Early-years roles requiring Level 2/3 childcare qualifications."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Do listings show the teacher pay scale?",
+          "a": "Where the school or source states MPS/UPS points we show them in the salary line; otherwise the description carries pay detail. Independent-sector pay varies more widely.",
+          "ukOnly": true
+        }
+      ],
+      "intro_us": "Teaching and school-support roles across public districts, charters and private schools. State certification requirements vary; shortage subjects carry incentives in most states."
+    },
+    {
+      "slug": "construction",
+      "name": "Construction",
+      "tint": "#FFF6DE",
+      "intro": "Trades, site management, surveying and construction professional roles. CSCS cards and tickets gate site work; day-rate contracting is standard across trades and freelance professional roles.",
+      "popularTitles": [
+        {
+          "t": "Site Manager",
+          "d": "Runs delivery on residential and commercial sites — SMSTS, CSCS and first aid required."
+        },
+        {
+          "t": "Quantity Surveyor",
+          "d": "Cost management from tender to final account. PQS and contractor-side both hiring."
+        },
+        {
+          "t": "Electrician",
+          "d": "JIB-graded installation and maintenance work, employed and self-employed."
+        },
+        {
+          "t": "Project Manager",
+          "d": "Client-side and contractor roles across build sectors."
+        },
+        {
+          "t": "Estimator",
+          "d": "Pricing tenders in main-contract and subcontract businesses."
+        }
+      ],
+      "faqs": [
+        {
+          "q": "Day rate or salary?",
+          "a": "Trades and freelance professional roles commonly quote day rates; staff roles quote annual salary. Orbit Jobs normalises both into the salary line and labels the period clearly.",
+          "ukOnly": false
+        }
+      ],
+      "intro_us": "Trades, superintendents, estimators and construction professionals. OSHA credentials gate site work, and travel-heavy roles typically quote per-diem alongside pay."
+    }
+  ],
+  "industries": [
+    {
+      "slug": "fintech",
+      "name": "Fintech",
+      "intro": "The UK is Europe's fintech capital. Hiring spans engineering, compliance, operations and growth — concentrated in London but increasingly distributed.",
+      "roles": [
+        "Software Engineer",
+        "Compliance Officer",
+        "Product Manager",
+        "Customer Success Manager"
+      ]
+    },
+    {
+      "slug": "healthcare-and-life-sciences",
+      "name": "Healthcare & Life Sciences",
+      "intro": "From NHS trusts to biotech scale-ups: clinical, scientific, quality and operational hiring with deep regional clusters in Cambridge, Oxford and the North West.",
+      "roles": [
+        "Registered Nurse",
+        "Quality Engineer",
+        "Clinical Pharmacist",
+        "Data Analyst"
+      ]
+    },
+    {
+      "slug": "manufacturing",
+      "name": "Manufacturing",
+      "intro": "Advanced manufacturing keeps the Midlands and North hiring: production, maintenance, quality and supply chain, with strong shift premiums.",
+      "roles": [
+        "Maintenance Engineer",
+        "Production Operative",
+        "Quality Engineer",
+        "Supply Chain Analyst"
+      ]
+    },
+    {
+      "slug": "retail-and-ecommerce",
+      "name": "Retail & E-commerce",
+      "intro": "Store operations meet digital trading. E-commerce, marketing and fulfilment roles keep growing while store leadership remains the biggest single employer.",
+      "roles": [
+        "Digital Marketing Manager",
+        "Warehouse Operative",
+        "Customer Service Advisor",
+        "Buyer"
+      ]
+    },
+    {
+      "slug": "professional-services",
+      "name": "Professional Services",
+      "intro": "Law, accountancy, consulting and agencies — the qualification-led backbone of UK white-collar hiring.",
+      "roles": [
+        "Management Accountant",
+        "Commercial Solicitor",
+        "HR Advisor",
+        "Marketing Executive"
+      ]
+    },
+    {
+      "slug": "public-sector",
+      "name": "Public Sector",
+      "intro": "Councils, government bodies and the NHS: transparent pay scales, strong pensions and hybrid-by-default working patterns.",
+      "roles": [
+        "Data Analyst",
+        "HR Business Partner",
+        "Civil Engineer",
+        "Teaching Assistant"
+      ]
+    },
+    {
+      "slug": "energy",
+      "name": "Energy",
+      "intro": "Renewables growth plus traditional energy: engineering, project delivery and commercial roles from Aberdeen to the South West.",
+      "roles": [
+        "Electrical Engineer",
+        "Project Manager",
+        "Procurement Manager",
+        "Site Manager"
+      ]
+    },
+    {
+      "slug": "media",
+      "name": "Media",
+      "intro": "Publishing, broadcast, gaming and digital media — creative and commercial hiring concentrated in London, Manchester and Bristol.",
+      "roles": [
+        "Content Writer",
+        "Performance Marketing Manager",
+        "Account Executive",
+        "Product Manager"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "city": "London",
+      "region": "London"
+    },
+    {
+      "city": "Manchester",
+      "region": "North West"
+    },
+    {
+      "city": "Birmingham",
+      "region": "West Midlands"
+    },
+    {
+      "city": "Leeds",
+      "region": "Yorkshire & the Humber"
+    },
+    {
+      "city": "Bristol",
+      "region": "South West"
+    },
+    {
+      "city": "Edinburgh",
+      "region": "Scotland"
+    },
+    {
+      "city": "Glasgow",
+      "region": "Scotland"
+    },
+    {
+      "city": "Cambridge",
+      "region": "East of England"
+    },
+    {
+      "city": "Newcastle",
+      "region": "North East"
+    },
+    {
+      "city": "Cardiff",
+      "region": "Wales"
+    },
+    {
+      "city": "Belfast",
+      "region": "Northern Ireland"
+    },
+    {
+      "city": "Nottingham",
+      "region": "East Midlands"
+    },
+    {
+      "city": "Reading",
+      "region": "South East"
+    },
+    {
+      "city": "Remote",
+      "region": "Remote (UK)"
+    }
+  ],
+  "locations_us": [
+    {
+      "city": "New York",
+      "region": "New York"
+    },
+    {
+      "city": "San Francisco",
+      "region": "California"
+    },
+    {
+      "city": "Los Angeles",
+      "region": "California"
+    },
+    {
+      "city": "Austin",
+      "region": "Texas"
+    },
+    {
+      "city": "Chicago",
+      "region": "Illinois"
+    },
+    {
+      "city": "Boston",
+      "region": "Massachusetts"
+    },
+    {
+      "city": "Seattle",
+      "region": "Washington"
+    },
+    {
+      "city": "Denver",
+      "region": "Colorado"
+    },
+    {
+      "city": "Atlanta",
+      "region": "Georgia"
+    },
+    {
+      "city": "Miami",
+      "region": "Florida"
+    },
+    {
+      "city": "Washington DC",
+      "region": "District of Columbia"
+    },
+    {
+      "city": "Remote",
+      "region": "Remote (US)"
+    }
+  ]
+}

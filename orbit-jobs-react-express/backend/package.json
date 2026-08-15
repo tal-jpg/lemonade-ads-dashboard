@@ -1,0 +1,22 @@
+{
+  "name": "orbit-jobs-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Orbit Jobs API — Express + MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "seed": "node scripts/seed.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "mongodb": "^7.5.0",
+    "multer": "^2.0.2"
+  }
+}

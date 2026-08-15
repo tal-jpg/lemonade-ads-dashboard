@@ -1,0 +1,140 @@
+[
+  {
+    "id": "src_jobstream",
+    "name": "JobStream",
+    "adapter_type": "feed",
+    "country": "UK",
+    "schedule": "hourly",
+    "permission_evidence": "Partner feed agreement OJ-2026-014 (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "listing_ref",
+      "title": "position",
+      "company": "org_name",
+      "city": "town",
+      "description": "ad_text",
+      "salary_min": "pay_from",
+      "salary_max": "pay_to",
+      "salary_period": "pay_period",
+      "job_type": "contract_kind",
+      "work_model": "remote_type",
+      "posted_at": "listed_on",
+      "apply_url": "target_url"
+    }
+  },
+  {
+    "id": "src_hirewire",
+    "name": "HireWire",
+    "adapter_type": "api",
+    "country": "UK",
+    "schedule": "every 4 hours",
+    "permission_evidence": "API licence key HW-88231 (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "id",
+      "title": "jobTitle",
+      "company": "employerName",
+      "city": "location.city",
+      "description": "descriptionHtml",
+      "salary_min": "salary.min",
+      "salary_max": "salary.max",
+      "salary_period": "salary.interval",
+      "job_type": "employmentType",
+      "work_model": "workplaceType",
+      "posted_at": "publishedAt",
+      "apply_url": "applyUrl"
+    }
+  },
+  {
+    "id": "src_britjobs",
+    "name": "BritJobs",
+    "adapter_type": "feed",
+    "country": "UK",
+    "schedule": "daily",
+    "permission_evidence": "Affiliate programme member #4417 (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "guid",
+      "title": "job_title",
+      "company": "advertiser",
+      "city": "job_location",
+      "description": "job_description",
+      "salary_min": "min_annual_salary",
+      "salary_max": "max_annual_salary",
+      "salary_period": null,
+      "job_type": "job_category_type",
+      "work_model": null,
+      "posted_at": "date_posted",
+      "apply_url": "url"
+    }
+  },
+  {
+    "id": "src_talentfeed",
+    "name": "TalentFeed",
+    "adapter_type": "partner",
+    "country": "UK",
+    "schedule": "daily",
+    "permission_evidence": "Reciprocal syndication contract (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "ref",
+      "title": "role",
+      "company": "client",
+      "city": "place",
+      "description": "details",
+      "salary_min": "rate_low",
+      "salary_max": "rate_high",
+      "salary_period": "rate_unit",
+      "job_type": "kind",
+      "work_model": "model",
+      "posted_at": "live_from",
+      "apply_url": "link"
+    }
+  },
+  {
+    "id": "src_stateside",
+    "name": "StateSide Jobs",
+    "adapter_type": "feed",
+    "country": "US",
+    "schedule": "hourly",
+    "permission_evidence": "Partner feed agreement OJ-US-2026-002 (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "posting_id",
+      "title": "job_name",
+      "company": "hiring_co",
+      "city": "metro",
+      "description": "body",
+      "salary_min": "comp_min",
+      "salary_max": "comp_max",
+      "salary_period": "comp_basis",
+      "job_type": "engagement",
+      "work_model": "site_policy",
+      "posted_at": "first_listed",
+      "apply_url": "out_link"
+    }
+  },
+  {
+    "id": "src_libertylist",
+    "name": "LibertyList",
+    "adapter_type": "api",
+    "country": "US",
+    "schedule": "every 6 hours",
+    "permission_evidence": "API licence LL-2291 (demo)",
+    "active": true,
+    "field_map": {
+      "external_id": "uid",
+      "title": "position.title",
+      "company": "company.name",
+      "city": "position.city",
+      "description": "position.summary",
+      "salary_min": "compensation.low",
+      "salary_max": "compensation.high",
+      "salary_period": "compensation.unit",
+      "job_type": "position.type",
+      "work_model": "position.workplace",
+      "posted_at": "listedAt",
+      "apply_url": "applyLink"
+    }
+  }
+]

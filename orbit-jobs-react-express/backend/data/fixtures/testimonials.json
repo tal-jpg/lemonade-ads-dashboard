@@ -1,0 +1,10 @@
+[
+  { "quote": "I'd been juggling four job sites with four sets of alerts. Orbit found me the same roles in one search — and the salary filter meant I stopped wasting evenings on listings that were never going to work.", "name": "Hannah R.", "role": "Management Accountant", "company": "Leeds", "type": "candidate" },
+  { "quote": "Applied on my phone during a lunch break. Under a minute, no account, and I could actually track what happened afterwards. That's how it should work everywhere.", "name": "Marcus O.", "role": "DevOps Engineer", "company": "London", "type": "candidate" },
+  { "quote": "We're a 40-person firm with no ATS. The job was live the same morning and the applicant view is honestly better than the enterprise tool I used at my last company.", "name": "Priya S.", "role": "HR Manager", "company": "Thames Logistics", "type": "employer" },
+  { "quote": "Publishing the salary range felt uncomfortable. It shouldn't have — applications went up and the conversations got easier, because everyone already knew the number.", "name": "Daniel K.", "role": "Founder", "company": "Plumline", "type": "employer" },
+  { "quote": "The alert emails only send genuinely new roles. I didn't realise how rare that is until the other boards' duplicates stopped.", "name": "Aisha B.", "role": "Registered Nurse", "company": "Manchester", "type": "candidate" },
+  { "quote": "Being able to see where a listing comes from builds trust. When it says 'via' a partner board, it says so — no pretending.", "name": "Tom W.", "role": "Site Manager", "company": "Cardiff", "type": "candidate" },
+  { "quote": "Three screening questions replaced our first phone stage. We interviewed half as many people and hired faster.", "name": "Elena V.", "role": "Talent Lead", "company": "NovaBank", "type": "employer" },
+  { "quote": "Saved a shortlist on the bus, applied from my laptop that evening, had an interview by Friday. The tracking alone is worth the account.", "name": "Josh M.", "role": "Marketing Executive", "company": "Bristol", "type": "candidate" }
+]

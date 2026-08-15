@@ -1,0 +1,8 @@
+/* Vite-specific glue on top of orbit.css.
+   Fonts are self-hosted via @fontsource (imported in main.tsx) — no
+   render-blocking Google Fonts request, no layout shift. These overrides
+   point the design-system tokens at them. */
+:root {
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
