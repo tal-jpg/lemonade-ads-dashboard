@@ -372,15 +372,42 @@
       <h3>One CWV point worth knowing before you measure</h3>
       <p><strong>Field data almost certainly does not exist for this origin.</strong> The Chrome UX Report needs a minimum traffic threshold to publish an origin, and 37 impressions in 38 days is nowhere near it. PageSpeed Insights will therefore only ever return lab (Lighthouse) numbers here. Make sure nobody reports "no Core Web Vitals issues detected" as a pass — that message means <em>no data</em>, not <em>no problem</em>. Judge performance on the Lighthouse run and on WebPageTest until real traffic exists.</p>
 
-      <h3>The subdomain is a self-inflicted handicap</h3>
-      <p>This is the one architectural call I will make without a crawl, because it does not need one. <code>school.orbittechlab.com</code> is a separate host from <code>www.orbittechlab.com</code>. Google consolidates authority far more readily within a single hostname than across subdomains, and you are currently asking a brand-new product on a subdomain of a brand-new studio domain to earn trust <em>twice</em>, from zero, in parallel.</p>
-      <p>Three options, in order of my preference:</p>
+      <h3>The marketing site and the application are on the same host</h3>
+      <p>This is the one architectural call I will make without a crawl, because it does not need one. Keeping <code>orbittechlab.com</code> as the parent brand is <strong>correct</strong> — a studio brand with products beneath it is sound structure, and nothing below argues against it. The problem is narrower: <code>school.orbittechlab.com</code> is serving the <em>sales</em> homepage and, presumably, the login and the five role-based portals. Those two jobs have opposite requirements. Marketing pages need to rank; an application needs to be locked down and kept out of the index.</p>
+
+      <h3>Target architecture</h3>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>URL</th><th>Role</th><th>Indexing</th></tr></thead>
+          <tbody>
+            <tr><td class="q">orbittechlab.com/</td><td>Studio home</td><td>Index</td></tr>
+            <tr><td class="q">orbittechlab.com/campuscore/</td><td><strong>Product marketing home — the money page</strong></td><td>Index</td></tr>
+            <tr><td class="q">orbittechlab.com/campuscore/pricing</td><td>PKR tiers</td><td>Index</td></tr>
+            <tr><td class="q">orbittechlab.com/campuscore/integrations/jazzcash</td><td>One page per payment integration</td><td>Index</td></tr>
+            <tr><td class="q">orbittechlab.com/campuscore/blog/…</td><td>Content programme</td><td>Index</td></tr>
+            <tr><td class="q">orbittechlab.com/toolorbit/ · /repliva/ · /orbit-ai/</td><td>Sibling products</td><td>Index</td></tr>
+            <tr><td class="q">school.orbittechlab.com</td><td>The application — login and five portals</td><td class="bad">noindex + robots disallow</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">You keep the subdomain you already built. Only the marketing pages move. This is materially less work than a full migration and it is the standard SaaS split.</p>
+
+      <h3>Why a subfolder, specifically for this studio</h3>
+      <p>Google consolidates authority far more readily within a single hostname than across subdomains. With four products on four hosts you are building four authority piles from zero, in parallel, with one small team. In subfolders you build one.</p>
+      <p>The decisive argument is <strong>ToolOrbit</strong>. Free online tools are the most naturally link-attracting asset type on the web — people link to a tool they used, without being asked. On a separate host, every one of those links is stranded and CampusCore inherits nothing. In a subfolder, they compound directly into your ability to outrank EduSuite and TaleemPro for commercial school-ERP terms. <em>Cannot verify where ToolOrbit, Repliva and Orbit AI currently live</em> — the egress block covers those too — but if each sits on its own subdomain, the problem is multiplied by four.</p>
+
+      <h3>Migration order</h3>
       <ol class="body">
-        <li><strong><code>orbittechlab.com/campuscore/</code></strong> — a subfolder. Every link the studio earns for ToolOrbit, Repliva or Orbit AI compounds into CampusCore's ranking ability, and vice versa. For a multi-product studio this is almost always correct.</li>
-        <li><strong>A dedicated exact-match domain</strong> (<code>campuscore.pk</code> or similar) — weaker on consolidation, but a <code>.pk</code> ccTLD is a genuine geo-relevance signal in this market and would help the brand-collision problem in section 6.</li>
-        <li><strong>Stay on the subdomain</strong> — only defensible if a migration would break the app's routing or auth in ways that cost more than the SEO gain.</li>
+        <li>Build the marketing pages under <code>orbittechlab.com/campuscore/</code>.</li>
+        <li>301 each marketing URL from <code>school.orbittechlab.com</code> to its <strong>specific</strong> new path — one-to-one, never a blanket redirect to the homepage.</li>
+        <li>Apply <code>noindex</code> and a robots disallow to what remains on the subdomain (login, dashboards, portals).</li>
+        <li>Keep the subdomain and its redirects alive indefinitely. Do not retire it after a few months.</li>
+        <li>Verify <code>orbittechlab.com</code> in Search Console and submit fresh sitemaps. Try the Change of Address tool; if it will not accept a subdomain-to-subfolder pair, the 301s carry the move regardless.</li>
       </ol>
-      <p><strong>Decide this now.</strong> You have two ranking URLs and one click to lose. Migrating today costs a weekend. Migrating in eighteen months, with a few hundred ranking pages and real traffic, costs a quarter of lost revenue and a redirect map nobody wants to own.</p>
+      <p><strong>Sequence this before the content build, not after.</strong> You have two ranking URLs and one click to lose, so the move costs a weekend today. Publish the pricing and payment-integration pages on <code>school.</code> first and you will build them on the wrong host and migrate twice.</p>
+
+      <h3>On renaming — don't</h3>
+      <p>Section 6 documents the brand collision in full, so to be explicit about what it does <em>not</em> imply: <strong>a rename is not worth it.</strong> The term <code>campuscore</code> drew four impressions in six weeks — you would be spending real money to win a keyword with no volume. Every rival on the name is US higher-ed software; none of them compete for Pakistani K-12 buyers. Ship the name qualified instead — "CampusCore by Orbit Tech Lab", <code>areaServed: "PK"</code>, Pakistan in the title — and note that the subfolder URL does this work for free, because <code>orbittechlab.com/campuscore/</code> carries the parent brand in the path where a subdomain does not.</p>
     </div>
   </section>
 
@@ -741,21 +768,21 @@
           </tr>
           <tr>
             <td class="rank">11</td>
+            <td>Marketing pages share a host with the application</td>
+            <td class="num">2</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~50 / mo</td>
+            <td class="num">14h</td>
+            <td>Move marketing to <code>orbittechlab.com/campuscore/</code> with a 1:1 301 map; leave the app on <code>school.</code> under <code>noindex</code>. <strong>Do this before the content build</strong> or you will migrate twice.</td>
+          </tr>
+          <tr>
+            <td class="rank">12</td>
             <td>Pages not structured for AI citation</td>
             <td class="num">6</td>
             <td><span class="sev h">High</span></td>
             <td class="num">~20 / mo</td>
             <td class="num">6h</td>
             <td>Add a 40–60 word direct-answer definition under every H1; convert H2s to question form matching real queries; date all factual claims.</td>
-          </tr>
-          <tr>
-            <td class="rank">12</td>
-            <td>Product isolated on a subdomain</td>
-            <td class="num">2</td>
-            <td><span class="sev h">High</span></td>
-            <td class="num">~50 / mo</td>
-            <td class="num">20h</td>
-            <td>Migrate to <code>orbittechlab.com/campuscore/</code> with a full 301 map, or move to <code>campuscore.pk</code>. Decide now — the cost only grows.</td>
           </tr>
           <tr>
             <td class="rank">13</td>
@@ -832,8 +859,8 @@
             <li>Ship the <code>Organization</code> + <code>SoftwareApplication</code> + <code>WebSite</code> schema block and validate it.</li>
             <li>Rewrite the homepage title and meta description.</li>
             <li>Fix every indexation blocker the Pages report surfaces; submit a clean sitemap.</li>
-            <li>Publish the PKR pricing page.</li>
-            <li><strong>Make the subdomain decision.</strong> It gets more expensive every week you defer it.</li>
+            <li><strong>Execute the host split first, before any new pages are written.</strong> Marketing to <code>orbittechlab.com/campuscore/</code>, app stays on <code>school.</code> under <code>noindex</code>, 1:1 301s. Everything below gets built on the new paths.</li>
+            <li>Publish the PKR pricing page — on the new host.</li>
           </ul>
         </div>
       </div>
@@ -854,7 +881,7 @@
             <li>Submit to all five vendor directories; add each URL to <code>sameAs</code>.</li>
             <li>Pitch the three roundup publishers.</li>
             <li>Retarget the attendance post with a 301 from the old URL.</li>
-            <li>If migrating hosts, execute it here — after the schema work, before the content volume grows.</li>
+            <li>Consolidate the sibling products — ToolOrbit, Repliva, Orbit AI — into subfolders on the same domain, so their links compound into CampusCore rather than stranding on separate hosts.</li>
           </ul>
         </div>
       </div>
