@@ -1,0 +1,888 @@
+<title>CampusCore Search Audit</title>
+<style>
+  :root{
+    --ground:#F6F8FA;
+    --panel:#FFFFFF;
+    --panel-2:#EFF3F6;
+    --ink:#111922;
+    --ink-2:#3D4A57;
+    --ink-3:#6B7986;
+    --rule:#DCE3E9;
+    --rule-2:#C4CFD8;
+    --accent:#1B5E7A;
+    --accent-soft:#E3EEF3;
+    --crit:#A33227;
+    --high:#A9691F;
+    --med:#6F6233;
+    --low:#5D6B78;
+    --crit-bg:#F7E7E4;
+    --high-bg:#F8EEDF;
+    --med-bg:#F1EEE2;
+    --low-bg:#E9EEF2;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0D1319;
+      --panel:#141C24;
+      --panel-2:#1A242E;
+      --ink:#E3EAF0;
+      --ink-2:#B3C0CB;
+      --ink-3:#8092A0;
+      --rule:#26333F;
+      --rule-2:#374755;
+      --accent:#63AECB;
+      --accent-soft:#16303C;
+      --crit:#E8897C;
+      --high:#DFAE6A;
+      --med:#BFB183;
+      --low:#93A3B1;
+      --crit-bg:#2E1A17;
+      --high-bg:#2C2216;
+      --med-bg:#262316;
+      --low-bg:#1B242C;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0D1319;
+    --panel:#141C24;
+    --panel-2:#1A242E;
+    --ink:#E3EAF0;
+    --ink-2:#B3C0CB;
+    --ink-3:#8092A0;
+    --rule:#26333F;
+    --rule-2:#374755;
+    --accent:#63AECB;
+    --accent-soft:#16303C;
+    --crit:#E8897C;
+    --high:#DFAE6A;
+    --med:#BFB183;
+    --low:#93A3B1;
+    --crit-bg:#2E1A17;
+    --high-bg:#2C2216;
+    --med-bg:#262316;
+    --low-bg:#1B242C;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:16.5px;
+    line-height:1.62;
+    margin:0;
+    padding:0 20px 96px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+  .col{max-width:68ch}
+
+  /* ---------- masthead ---------- */
+  header.mast{
+    padding:52px 0 26px;
+    border-bottom:2px solid var(--ink);
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);margin:0;
+  }
+  h1{
+    font-family:var(--sans);font-weight:800;letter-spacing:-.022em;
+    font-size:clamp(30px,5.2vw,46px);line-height:1.04;margin:0;text-wrap:balance;
+  }
+  .subject{
+    font-family:var(--mono);font-size:13px;color:var(--accent);
+    word-break:break-all;margin:0;
+  }
+  .meta-line{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
+    display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;
+  }
+
+  /* ---------- readout ---------- */
+  .readout{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+    border-bottom:1px solid var(--rule);
+  }
+  .cell{padding:20px 18px 18px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:5px}
+  .cell:last-child{border-right:none}
+  .cell .k{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .cell .v{font-family:var(--sans);font-weight:750;font-size:29px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .cell .n{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.4}
+  .cell.alarm .v{color:var(--crit)}
+
+  /* ---------- sparkline ---------- */
+  .spark{padding:22px 0 26px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:10px}
+  .spark-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .spark-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .spark-note{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .spark svg{width:100%;height:auto;display:block;overflow:visible}
+  .spark-axis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+
+  /* ---------- verdict ---------- */
+  .verdict{padding:34px 0 6px;display:flex;flex-direction:column;gap:16px}
+  .verdict p{margin:0}
+  .verdict .lead{font-size:20px;line-height:1.5;color:var(--ink);text-wrap:pretty}
+
+  /* ---------- gap notice ---------- */
+  .gaps{
+    background:var(--panel);border:1px solid var(--rule-2);border-left:3px solid var(--crit);
+    padding:22px 24px;display:flex;flex-direction:column;gap:12px;margin:30px 0 10px;
+  }
+  .gaps h2{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--crit);margin:0;font-weight:700;
+  }
+  .gaps ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;font-size:15.5px}
+  .gaps li::marker{color:var(--ink-3)}
+  .gaps code{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);padding:1px 5px;border-radius:2px;word-break:break-all}
+
+  /* ---------- sections ---------- */
+  section{padding:44px 0 4px;border-top:1px solid var(--rule);margin-top:34px}
+  section:first-of-type{border-top:none}
+  .sec-head{display:flex;gap:16px;align-items:baseline;margin-bottom:22px}
+  .sec-num{
+    font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;
+    letter-spacing:.06em;padding-top:5px;flex:none;
+  }
+  h2.sec{
+    font-family:var(--sans);font-weight:780;letter-spacing:-.018em;
+    font-size:clamp(21px,3.1vw,28px);line-height:1.14;margin:0;text-wrap:balance;
+  }
+  h3{
+    font-family:var(--sans);font-weight:700;font-size:15.5px;letter-spacing:-.005em;
+    margin:26px 0 9px;color:var(--ink);
+  }
+  h3:first-child{margin-top:0}
+  p{margin:0 0 14px}
+  strong{font-weight:700;color:var(--ink)}
+  a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  ul.body,ol.body{margin:0 0 16px;padding-left:21px;display:flex;flex-direction:column;gap:8px}
+  ul.body li::marker,ol.body li::marker{color:var(--ink-3)}
+  code{font-family:var(--mono);font-size:13px;background:var(--panel-2);padding:1px 5px;border-radius:2px}
+
+  .verified{
+    font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);padding:2px 7px;border-radius:2px;
+    white-space:nowrap;font-weight:600;
+  }
+  .blocked{
+    font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--crit);background:var(--crit-bg);padding:2px 7px;border-radius:2px;
+    white-space:nowrap;font-weight:600;
+  }
+
+  .cantverify{
+    border:1px dashed var(--rule-2);background:var(--panel);
+    padding:15px 18px;margin:18px 0;font-size:15px;color:var(--ink-2);
+    display:flex;flex-direction:column;gap:7px;
+  }
+  .cantverify .cv-h{
+    font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:700;
+  }
+  .cantverify p{margin:0}
+
+  /* ---------- data tables ---------- */
+  .tscroll{overflow-x:auto;margin:16px 0 20px;border:1px solid var(--rule);background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13.5px;line-height:1.45}
+  th{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 13px;background:var(--panel-2);
+    border-bottom:1px solid var(--rule-2);white-space:nowrap;font-weight:700;
+  }
+  td{padding:11px 13px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+  tr:last-child td{border-bottom:none}
+  td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+  td.q{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+  td.bad{color:var(--crit);font-weight:600}
+  .tnote{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin:-8px 0 22px;line-height:1.5}
+
+  /* ---------- priority table ---------- */
+  #priority table{font-size:13px}
+  #priority th:nth-child(1){min-width:210px}
+  #priority td:nth-child(1){color:var(--ink);font-weight:600}
+  #priority th:last-child,#priority td:last-child{min-width:340px}
+  .sev{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+    padding:3px 7px;border-radius:2px;white-space:nowrap;font-weight:700;display:inline-block;
+  }
+  .sev.c{color:var(--crit);background:var(--crit-bg)}
+  .sev.h{color:var(--high);background:var(--high-bg)}
+  .sev.m{color:var(--med);background:var(--med-bg)}
+  .sev.l{color:var(--low);background:var(--low-bg)}
+  .rank{font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  tr.enabler td{background:var(--panel-2)}
+
+  /* ---------- plan ---------- */
+  .plan{display:flex;flex-direction:column;gap:0;margin:22px 0 8px}
+  .phase{border-top:1px solid var(--rule-2);padding:24px 0 6px;display:grid;grid-template-columns:132px 1fr;gap:26px}
+  .phase:last-child{border-bottom:1px solid var(--rule-2);padding-bottom:26px}
+  .phase-k{display:flex;flex-direction:column;gap:3px}
+  .phase-k .d{font-family:var(--sans);font-weight:800;font-size:19px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .phase-k .l{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .phase-b h4{font-family:var(--sans);font-size:15px;font-weight:700;margin:0 0 9px;color:var(--ink)}
+  .phase-b ul{margin:0;padding-left:19px;display:flex;flex-direction:column;gap:7px;font-size:15px}
+  .phase-b ul li::marker{color:var(--ink-3)}
+  @media (max-width:620px){
+    .phase{grid-template-columns:1fr;gap:12px}
+    .cell{border-right:none;border-bottom:1px solid var(--rule)}
+  }
+
+  footer{
+    margin-top:44px;padding-top:22px;border-top:2px solid var(--ink);
+    font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Technical SEO Audit · Search Console period 8 Jul – 14 Aug 2026</p>
+    <h1>CampusCore is not in the race yet</h1>
+    <p class="subject">https://school.orbittechlab.com/</p>
+    <p class="meta-line">
+      <span>Prepared 17 Aug 2026</span>
+      <span>Source: GSC Performance export (7 CSVs)</span>
+      <span>Market: Pakistan · Language: English</span>
+    </p>
+  </header>
+
+  <div class="readout">
+    <div class="cell alarm">
+      <span class="k">Clicks</span>
+      <span class="v">1</span>
+      <span class="n">in 38 days</span>
+    </div>
+    <div class="cell">
+      <span class="k">Impressions</span>
+      <span class="v">37</span>
+      <span class="n">0.97 / day</span>
+    </div>
+    <div class="cell">
+      <span class="k">URLs seen</span>
+      <span class="v">2</span>
+      <span class="n">of the whole site</span>
+    </div>
+    <div class="cell">
+      <span class="k">Named queries</span>
+      <span class="v">3</span>
+      <span class="n">84% anonymised</span>
+    </div>
+    <div class="cell alarm">
+      <span class="k">Rich results</span>
+      <span class="v">0</span>
+      <span class="n">report is empty</span>
+    </div>
+  </div>
+
+  <div class="spark">
+    <div class="spark-head">
+      <span class="spark-title">Impressions per day · 8 Jul → 14 Aug 2026</span>
+      <span class="spark-note">17 of 38 days at zero · flat, no compounding</span>
+    </div>
+    <svg viewBox="0 0 560 64" preserveAspectRatio="none" role="img" aria-label="Daily impressions from 8 July to 14 August 2026, oscillating between zero and four per day with no upward trend. The single click occurred on 10 July.">
+      <line x1="0" y1="58" x2="560" y2="58" stroke="var(--rule-2)" stroke-width="1"/>
+      <polygon fill="var(--accent-soft)" points="0,58.0 0.0,58.0 15.1,58.0 30.3,6.0 45.4,45.0 60.5,6.0 75.7,32.0 90.8,58.0 105.9,45.0 121.1,32.0 136.2,19.0 151.4,58.0 166.5,58.0 181.6,58.0 196.8,58.0 211.9,58.0 227.0,45.0 242.2,45.0 257.3,58.0 272.4,58.0 287.6,58.0 302.7,32.0 317.8,45.0 333.0,45.0 348.1,58.0 363.2,58.0 378.4,58.0 393.5,45.0 408.6,58.0 423.8,58.0 438.9,45.0 454.1,32.0 469.2,32.0 484.3,45.0 499.5,32.0 514.6,32.0 529.7,58.0 544.9,32.0 560.0,45.0 560,58.0"/>
+      <polyline fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round" points="0.0,58.0 15.1,58.0 30.3,6.0 45.4,45.0 60.5,6.0 75.7,32.0 90.8,58.0 105.9,45.0 121.1,32.0 136.2,19.0 151.4,58.0 166.5,58.0 181.6,58.0 196.8,58.0 211.9,58.0 227.0,45.0 242.2,45.0 257.3,58.0 272.4,58.0 287.6,58.0 302.7,32.0 317.8,45.0 333.0,45.0 348.1,58.0 363.2,58.0 378.4,58.0 393.5,45.0 408.6,58.0 423.8,58.0 438.9,45.0 454.1,32.0 469.2,32.0 484.3,45.0 499.5,32.0 514.6,32.0 529.7,58.0 544.9,32.0 560.0,45.0"/>
+      <circle cx="30.3" cy="6.0" r="3.4" fill="var(--crit)"/>
+    </svg>
+    <div class="spark-axis">
+      <span>8 Jul</span>
+      <span style="color:var(--crit)">● only click — 10 Jul</span>
+      <span>14 Aug</span>
+    </div>
+  </div>
+
+  <div class="verdict col">
+    <p class="lead">One click. Thirty-seven impressions. Thirty-eight days. There is no ranking problem to diagnose here, because the site is not yet competing — and no amount of on-page tuning changes a number that small.</p>
+    <p>Two facts dominate everything in this report. First, <strong>the export you sent is not three months of data</strong> — the filter says "Last 3 months" but the chart begins 8 July 2026, which means the property holds no data before that date. Roughly half of what you asked for cannot be computed from it. Second, and worse: <strong>you do not own your own brand name.</strong> The query <code>campuscore</code> returns your site at average position 6, because at least six unrelated products already use that name.</p>
+    <p>The work for the next 90 days is not optimisation. It is getting indexed, getting disambiguated as an entity, and publishing the three or four commercial pages this market actually searches for. Everything below is sorted to that end.</p>
+  </div>
+
+  <div class="gaps">
+    <h2>What I could not verify — and what to send</h2>
+    <ul>
+      <li><strong>The site itself is unreachable from this environment.</strong> The network egress policy returns <code>403</code> on CONNECT for both <code>school.orbittechlab.com</code> and <code>www.orbittechlab.com</code>. I have no HTML, headers, <code>robots.txt</code>, sitemap or render. <strong>Sections 1 and 2, and the structural half of section 3, cannot be completed without a crawl export</strong> (Screaming Frog → "Export All" as CSV) or unblocked access.</li>
+      <li><strong>No comparison period exists in the export.</strong> <code>Filters.csv</code> contains a single date filter. Re-export via <em>Performance → Date → Compare</em> for both "Previous period" and "Same period last year". The year-on-year comparison will return empty regardless — the property is six weeks old.</li>
+      <li><strong>No crawl export was attached</strong>, despite being listed in your brief.</li>
+      <li><strong>Your brief left five fields blank:</strong> business type, the five money pages, target keywords, and the three competitors. I inferred the product, market and competitor set from the live index — confirm or correct them, because the priority order in section 8 depends on them.</li>
+      <li><strong>No backlink data.</strong> A GSC performance export contains none. Section 7 is a plan, not a measurement.</li>
+    </ul>
+  </div>
+
+  <!-- 1 -->
+  <section id="s1">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2 class="sec">Indexation and crawl</h2>
+    </div>
+
+    <div class="col">
+      <h3>What the data proves <span class="verified">verified</span></h3>
+      <p><strong>Exactly two URLs have received a single impression in 38 days.</strong> The homepage (34) and one blog post (6). Every other page on the site — features, pricing, the five role-based portals, whatever else exists — registered zero impressions across the entire window.</p>
+    </div>
+
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>URL</th><th>Clicks</th><th>Impr.</th><th>CTR</th><th>Avg. position</th></tr></thead>
+        <tbody>
+          <tr><td class="q">/</td><td class="num">1</td><td class="num">34</td><td class="num">2.94%</td><td class="num">6.06</td></tr>
+          <tr><td class="q">/blog/attendance-management-best-practices</td><td class="num">0</td><td class="num">6</td><td class="num">0%</td><td class="num bad">18.17</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Pages.csv sums to 40 impressions; Countries.csv and Devices.csv both sum to 37. The 3-impression gap is GSC's standard dimension-anonymisation artefact — noted so nobody chases it as a tracking bug.</p>
+
+    <div class="col">
+      <p>Zero impressions is not proof of non-indexation, but for a commercial SaaS site with pricing and feature pages, 38 days at absolute zero is consistent with either not being indexed or not being competitive for anything at all. Both need the same first diagnostic.</p>
+
+      <h3>The trend is the real finding</h3>
+      <p>July averaged <strong>0.96 impressions/day</strong> across 24 days. August averaged <strong>1.00 impressions/day</strong> across 14 days. That is flat. A healthy new property produces a <em>rising</em> impression curve as pages enter the index and start surfacing for long-tail terms. Flat at roughly one impression per day, with <strong>17 of 38 days at zero</strong>, means the index footprint has stopped growing — the site got a toehold in early July and has not expanded since.</p>
+
+      <div class="cantverify">
+        <span class="cv-h">Cannot verify without a crawl</span>
+        <p><code>robots.txt</code> directives, XML sitemap presence and accuracy, <code>noindex</code> tags, canonical conflicts, redirect chains, orphan pages, thin or duplicate URLs, parameter bloat, crawl-budget waste.</p>
+      </div>
+
+      <h3>The one report that answers most of this</h3>
+      <p>Open <strong>GSC → Indexing → Pages</strong>. It gives indexed vs. not-indexed counts with exclusion reasons ("Discovered – currently not indexed", "Crawled – currently not indexed", "Excluded by noindex tag", "Alternate page with proper canonical"). At this site's size that single screen resolves most of section 1 in about ten minutes. Send it and I will finish this section properly.</p>
+      <p>Crawl budget, for the record, is <strong>not</strong> a concern at this scale. Any consultant selling you crawl-budget optimisation on a site with two ranking URLs is selling you nothing.</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2 class="sec">Technical health</h2>
+    </div>
+
+    <div class="col">
+      <div class="cantverify">
+        <span class="cv-h">Blocked — no page access <span class="blocked">403</span></span>
+        <p>Core Web Vitals per template, mobile usability, HTTPS configuration and redirect behaviour, render-blocking resources, image formats and sizing, JS-dependent content, hreflang, and click-depth from the homepage all require fetching the pages. I have none of it.</p>
+      </div>
+
+      <h3>One CWV point worth knowing before you measure</h3>
+      <p><strong>Field data almost certainly does not exist for this origin.</strong> The Chrome UX Report needs a minimum traffic threshold to publish an origin, and 37 impressions in 38 days is nowhere near it. PageSpeed Insights will therefore only ever return lab (Lighthouse) numbers here. Make sure nobody reports "no Core Web Vitals issues detected" as a pass — that message means <em>no data</em>, not <em>no problem</em>. Judge performance on the Lighthouse run and on WebPageTest until real traffic exists.</p>
+
+      <h3>The subdomain is a self-inflicted handicap</h3>
+      <p>This is the one architectural call I will make without a crawl, because it does not need one. <code>school.orbittechlab.com</code> is a separate host from <code>www.orbittechlab.com</code>. Google consolidates authority far more readily within a single hostname than across subdomains, and you are currently asking a brand-new product on a subdomain of a brand-new studio domain to earn trust <em>twice</em>, from zero, in parallel.</p>
+      <p>Three options, in order of my preference:</p>
+      <ol class="body">
+        <li><strong><code>orbittechlab.com/campuscore/</code></strong> — a subfolder. Every link the studio earns for ToolOrbit, Repliva or Orbit AI compounds into CampusCore's ranking ability, and vice versa. For a multi-product studio this is almost always correct.</li>
+        <li><strong>A dedicated exact-match domain</strong> (<code>campuscore.pk</code> or similar) — weaker on consolidation, but a <code>.pk</code> ccTLD is a genuine geo-relevance signal in this market and would help the brand-collision problem in section 6.</li>
+        <li><strong>Stay on the subdomain</strong> — only defensible if a migration would break the app's routing or auth in ways that cost more than the SEO gain.</li>
+      </ol>
+      <p><strong>Decide this now.</strong> You have two ranking URLs and one click to lose. Migrating today costs a weekend. Migrating in eighteen months, with a few hundred ranking pages and real traffic, costs a quarter of lost revenue and a redirect map nobody wants to own.</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec">On-page</h2>
+    </div>
+
+    <div class="col">
+      <p>You did not supply money pages, so I cannot map keywords to URLs or test for cannibalisation. What I <em>can</em> do is audit the two templates that are visible in the live index — and one of them is genuinely fine, which is worth saying plainly.</p>
+
+      <h3>Homepage, as it currently appears in search <span class="verified">verified</span></h3>
+    </div>
+
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Element</th><th>Current</th><th>Length</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="q">Title</td>
+            <td>CampusCore — School Management System for Pakistani Schools</td>
+            <td class="num">59</td>
+            <td>Well-formed. Right length, keyword-led, geo-qualified. <strong>But it spends the first slot on a brand with zero equity and six competitors on the name.</strong></td>
+          </tr>
+          <tr>
+            <td class="q">Meta description</td>
+            <td>CampusCore is an all-in-one school management system for Pakistani schools — academics, attendance, fee management, exams, payroll and parent communication in five role-based portals with AI insights.</td>
+            <td class="num bad">199</td>
+            <td class="bad">Truncates at ~155–160. The reader loses "five role-based portals with AI insights" — which is the only differentiator in the sentence.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col">
+      <h3>Rewrites</h3>
+      <p><strong>Homepage title</strong> — lead with the category and the market, because that is what has demand. The brand goes last until it earns the front:</p>
+      <p><code>School Management System for Pakistani Schools | CampusCore</code> <span class="tnote">(58 chars)</span></p>
+      <p><strong>Homepage meta description</strong> — cut to fit, front-load the four modules people actually search for, and keep the portal differentiator inside the visible window:</p>
+      <p><code>Manage fees, attendance, exams and results in one system built for Pakistani schools. Separate portals for admins, teachers, parents and students.</code> <span class="tnote">(146 chars)</span></p>
+
+      <h3>The blog post is targeting the wrong market</h3>
+      <p><code>/blog/attendance-management-best-practices</code> sits at average position <strong>18.17</strong>. That is not a near-miss you can nudge — it is a globally generic topic competing against every US and UK edtech publisher that has covered attendance for a decade, on a domain six weeks old. It will not rank, and if it ever does, it will attract readers in markets you do not sell to.</p>
+      <p>Retarget it. Same effort, a fraction of the competition:</p>
+      <ul class="body">
+        <li><strong>Title:</strong> <code>Student Attendance Management for Pakistani Schools: Registers, Biometrics and SMS Alerts</code></li>
+        <li><strong>URL:</strong> <code>/blog/student-attendance-management-pakistani-schools</code> (301 the old path)</li>
+        <li><strong>Angle:</strong> the actual local workflow — paper registers, biometric devices, the parent SMS/WhatsApp notification that Pakistani parents expect, and the board attendance-percentage requirements schools have to report against.</li>
+      </ul>
+      <p>Every content unit on this site should carry the Pakistan qualifier. You have a defensible geographic niche and you are publishing as if you were competing globally.</p>
+
+      <div class="cantverify">
+        <span class="cv-h">Cannot verify without a crawl</span>
+        <p>H1 presence and uniqueness, heading hierarchy, internal link counts and anchor text distribution, image alt text, and keyword cannibalisation between pages. Cannibalisation in particular is worth checking once you have the crawl — with the portals likely producing near-identical template pages, it is a plausible risk.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2 class="sec">Content and E-E-A-T</h2>
+    </div>
+
+    <div class="col">
+      <p>You left the competitor field blank, so I pulled the set that actually ranks for the category in this market: <a href="https://www.edusuite.pk/">EduSuite</a>, <a href="https://capobrain.com/">Capobrain</a> and <a href="https://taleempro.pk/">TaleemPro</a>, with <a href="https://www.sowaanerp.com/en-pk/education/">Sowaan ERP</a> and <a href="https://www.futuresol.net/products/cloud-campus-erp/isb-pk">Futuresol Cloud Campus ERP</a> close behind, plus the aggregator <a href="https://pakeducate.com/blog/best-school-management-systems-pakistan-2026/">PakEducate</a>. Confirm this is your real competitive set.</p>
+
+      <h3>The content gaps that decide this category</h3>
+      <p>These are not "topics you could cover". They are the specific things Pakistani school buyers filter on, that your competitors have pages for and you do not:</p>
+
+      <ol class="body">
+        <li><strong>FBR-compliant invoicing.</strong> Both EduSuite and Cloud Campus ERP lead with tax integration. For a Pakistani school this is a procurement blocker, not a feature. If CampusCore handles it, there is no page saying so — and if it does not, that is a product gap disguised as an SEO gap.</li>
+        <li><strong>Named payment integrations — JazzCash, EasyPaisa, SadaPay, HBL.</strong> These carry the highest commercial intent in the niche, because a school searching "school fee software JazzCash integration" has already decided to buy and is checking compatibility. Each integration deserves its own page. This is the single largest addressable gap on the list.</li>
+        <li><strong>WhatsApp and SMS parent communication.</strong> EduSuite ships it; TaleemPro competes on it. Pakistani parent expectations here are specific and worth a dedicated page.</li>
+        <li><strong>Urdu / bilingual interface.</strong> TaleemPro's explicit wedge is full Urdu–English support. If CampusCore has it, say so loudly; if not, know that you are losing a comparison you never see.</li>
+        <li><strong>Published PKR pricing.</strong> EduSuite publishes tiers with a free entry point. Buyers in this market filter on price before they filter on features — a "contact us for pricing" page removes you from the shortlist before anyone speaks to you.</li>
+        <li><strong>Comparison and listicle content.</strong> edusuite.pk, taleempro.pk and pakeducate.com all run "best school management software in Pakistan" pieces that rank. This is how the category is discovered. CampusCore appears in none of them — not as a listing, and not with a competing page of its own.</li>
+      </ol>
+
+      <h3>E-E-A-T: you have a real asset and you are not using it</h3>
+      <p>The studio positioning — an independent Lahore software house that builds and operates its own products, and depends on them internally — is a genuine trust signal, and it is <em>differentiated</em> in a category full of anonymous ERP vendors. It does not currently appear to be doing any work.</p>
+      <p>The signals this category is broadly missing, which means they are cheap to win:</p>
+      <ul class="body">
+        <li>Named founders and engineers with real bios, on an About page and as post authors.</li>
+        <li>A verifiable school count and named school case studies — "used by 40 schools" is worth less than one named school with a headmaster quote.</li>
+        <li>A physical Lahore address, phone number and company registration details in the footer. In a market with real vendor-trust anxiety, this converts and it corroborates the entity.</li>
+        <li>Dated content with visible last-updated stamps.</li>
+      </ul>
+
+      <div class="cantverify">
+        <span class="cv-h">Cannot verify</span>
+        <p>Whether any of these signals already exist on-site, current page depth versus competitors, and search-intent match per page. All require access. The gap list above is derived from what competitors rank for, not from confirmed absence on your site — confirm before you build.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2 class="sec">Search Console data analysis</h2>
+    </div>
+
+    <div class="col">
+      <h3>a. Striking-distance keywords (position 5–20, high impressions)</h3>
+      <p><strong>There are none.</strong> Not "a few weak ones" — none. The entire export contains three named queries carrying six impressions between them.</p>
+    </div>
+
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>Query</th><th>Clicks</th><th>Impr.</th><th>Avg. position</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr><td class="q">campuscore</td><td class="num">0</td><td class="num">4</td><td class="num bad">6.0</td><td>Your own brand name, and you are sixth. See section 6.</td></tr>
+          <tr><td class="q">campus core teacher</td><td class="num">0</td><td class="num">1</td><td class="num">5.0</td><td>Brand variant. Same problem.</td></tr>
+          <tr><td class="q">student attendance</td><td class="num">0</td><td class="num">1</td><td class="num bad">84.0</td><td>Page nine. A global head term with no path from here.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col">
+      <p>Two of those sit inside the 5–20 band on a technicality, but they are brand terms with four and one impressions — that is an entity problem, not a ranking-tweak opportunity, and treating it as the latter would waste the quarter.</p>
+
+      <h3>b. High impressions, CTR below expectation</h3>
+      <p>The homepage returns 34 impressions, 1 click, <strong>2.94% CTR at average position 6.06</strong>. Expected CTR at position 6 is roughly 5–7%, so on its face this reads as underperformance.</p>
+      <p><strong>It is not a finding.</strong> At n = 34 with a single click, the 95% confidence interval on that CTR runs from roughly 0.1% to 15%. One additional click would put it at 5.9% and "healthy". There is no statistically meaningful CTR signal anywhere in this export, and you should not spend a single hour on title testing until the homepage clears roughly 500 impressions.</p>
+      <p>The blog post — 6 impressions, 0 clicks at position 18.17 — is likewise exactly what position 18 predicts. Also not a finding.</p>
+
+      <h3>c. Biggest decliners versus last period</h3>
+      <p><strong>Cannot compute.</strong> The export contains one period. <code>Filters.csv</code> shows a single date filter and no comparison, and the chart's first row is 8 July 2026, so no earlier data exists to compare against. Re-export with <em>Performance → Date → Compare → Previous period</em>. The same-period-last-year comparison you asked for will come back empty — the property did not exist.</p>
+
+      <h3>d. Hidden demand — queries you rank for but did not target</h3>
+      <p><strong>Cannot be extracted from this export, and the reason matters.</strong> The three named queries account for 6 of 37 impressions. The other <strong>31 impressions — 84% of everything — sit below GSC's query-anonymisation threshold</strong> and are permanently invisible at this volume. The only non-brand query that surfaced at all is a head term at position 84.</p>
+      <p>The fix is free and takes ten minutes: <strong>add Bing Webmaster Tools.</strong> Bing does not anonymise low-volume queries. It will show you the actual long tail — including the Pakistani-language and integration-specific queries you are probably already surfacing for — within days. On a site this small it is strictly more useful than GSC for query discovery.</p>
+
+      <h3>Three further findings the export does support</h3>
+      <ul class="body">
+        <li><strong>Desktop is ranking materially worse than mobile.</strong> Desktop: 23 impressions, 0 clicks, average position 9.96. Mobile: 14 impressions, 1 click, average position 5.71. A 4.25-position deficit. The sample is far too small to be conclusive — treat it as a hypothesis to test against the crawl, not a fact. If it holds up with more data, look for a desktop-specific rendering or layout problem.</li>
+        <li><strong>Geography is correctly weighted but absolutely tiny.</strong> Pakistan accounts for 19 of 37 impressions (51%), which is the right market for the product. United States 6, India 4, United Kingdom 2, Kenya 2, and Netherlands, Bangladesh, Nepal and Somalia at 1 each. Those trailing countries are noise, not a market signal — do not build an international strategy on nine impressions.</li>
+        <li><strong>The single click landed on 10 July 2026.</strong> There have been 35 consecutive days without one since.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2 class="sec">AI search visibility</h2>
+    </div>
+
+    <div class="col">
+      <h3>Hard evidence: zero rich results, ever <span class="verified">verified</span></h3>
+      <p><code>Search appearance.csv</code> contains a header row and nothing else. No FAQ, no breadcrumb, no sitelinks, no product or review snippet has ever been awarded to this site. Either no structured data is deployed, or it is deployed and invalid. <em>Which one requires page access to determine</em> — but the outcome is the same today.</p>
+
+      <h3>The entity problem is the AI problem <span class="verified">verified</span></h3>
+      <p>This is the most important finding in the report, and it explains the brand-query data in section 5. Ask any model or AI Overview "what is CampusCore" and there are at least <strong>six</strong> competing answers, none of which are yours:</p>
+
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>Entity claiming "CampusCore"</th><th>What it is</th></tr></thead>
+          <tbody>
+            <tr><td class="q">campus-core.com</td><td>Academic advising and student success platform</td></tr>
+            <tr><td class="q">campus-core.ai</td><td>Agentic AI layer for universities</td></tr>
+            <tr><td class="q">campuscore.best</td><td>Student course and syllabus organiser</td></tr>
+            <tr><td class="q">apps.apple.com — CampusCore</td><td>iOS app listing</td></tr>
+            <tr><td class="q">play.google.com — CampusCore Suite</td><td>Android campus app suite</td></tr>
+            <tr><td class="q">linkedin.com/company/campus-core-advising</td><td>Company page</td></tr>
+            <tr><td class="q">corecampus.com</td><td>Near-identical inverted name — Student Information System</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>You are not losing the brand SERP because your homepage is weak. You are losing it because <strong>"CampusCore" is not a distinctive name in this space and you have supplied Google with nothing to tell you apart.</strong> Until the entity is disambiguated, you will not be cited by AI Overviews, ChatGPT, Perplexity or Gemini for your own name — they have six better-established candidates.</p>
+      <p>Two things follow. Short term, disambiguate hard with schema and <code>sameAs</code> (below). Long term, have an honest conversation about the name — the <code>.pk</code> domain option in section 2 exists partly to solve this, and "CampusCore Pakistan" or a rename is cheaper now than after you have brand equity worth keeping.</p>
+
+      <h3>Exactly which schema to add, in priority order</h3>
+      <ol class="body">
+        <li><strong><code>Organization</code></strong> — sitewide, in the <code>&lt;head&gt;</code>. Name "Orbit Tech Lab", <code>url</code>, <code>logo</code>, <code>address</code> (the Lahore address), <code>founder</code>, and critically <code>sameAs</code> pointing to every profile you control: LinkedIn, X, Facebook, Crunchbase, and the App Store / Play Store listings <em>if they are yours</em>. This is the disambiguation anchor — everything else hangs off it.</li>
+        <li><strong><code>SoftwareApplication</code></strong> — on the homepage. <code>name: "CampusCore"</code>, <code>applicationCategory: "BusinessApplication"</code>, <code>operatingSystem</code>, <code>offers</code> with <code>priceCurrency: "PKR"</code> and real prices, <code>areaServed: "PK"</code>, and <code>publisher</code> referencing the Organization node. The <code>areaServed</code> and PKR pricing are what separate you from the six other CampusCores.</li>
+        <li><strong><code>WebSite</code> with <code>SearchAction</code></strong> — enables the sitelinks search box and reinforces the site-level entity.</li>
+        <li><strong><code>FAQPage</code></strong> — on the homepage, the pricing page and each feature page. This is the highest-yield schema for AI Overview citation, because it maps a question to an answer explicitly and models lift that pairing directly.</li>
+        <li><strong><code>BreadcrumbList</code></strong> — sitewide. Cheap, and it is one of the few rich results a young site can actually win.</li>
+        <li><strong><code>Article</code> with a real <code>author</code></strong> — on every blog post, where <code>author</code> is a <code>Person</code> node with <code>name</code>, <code>jobTitle</code> and <code>sameAs</code>. Anonymous posts earn no E-E-A-T credit.</li>
+      </ol>
+      <p><strong>Do not add <code>LocalBusiness</code>.</strong> You are a software studio selling nationally, not a premises customers visit. <code>Organization</code> is the correct type here, and using <code>LocalBusiness</code> would send a geographic signal that misrepresents the business.</p>
+
+      <h3>Page structure for citation</h3>
+      <p>I cannot verify the current state of any page, so treat this as the target, not a diff. Each key page needs a <strong>40–60 word direct-answer paragraph immediately below the H1</strong> that defines the entity in plain declarative terms — "CampusCore is a school management system for Pakistani schools that handles fee collection, attendance, exams and parent communication across five role-based portals." Then question-form H2s that match real queries, and factual claims carrying dates and sources. Language models lift definitional paragraphs and question-answer pairs; they skip hero marketing copy entirely.</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <div class="sec-head">
+      <span class="sec-num">07</span>
+      <h2 class="sec">Off-page</h2>
+    </div>
+
+    <div class="col">
+      <div class="cantverify">
+        <span class="cv-h">Cannot verify without a backlink tool</span>
+        <p>Referring domain counts and quality, competitor link gaps, anchor text distribution, and toxic or spammy links. A GSC performance export contains no link data whatsoever. Pull <strong>GSC → Links</strong> for a free floor, and one month of Ahrefs or Semrush for the real picture and the competitor comparison.</p>
+      </div>
+
+      <p>The reasonable prior, given 38 days of history and one click: <strong>near-zero referring domains.</strong> Treat this as greenfield link acquisition, not remediation. There is almost certainly no toxic-link problem to clean up, and no disavow file to write — if a consultant proposes one before showing you the data, decline.</p>
+
+      <h3>Five realistic opportunities, ordered by realism</h3>
+      <ol class="body">
+        <li><strong>The aggregator listicles that already rank.</strong> <a href="https://pakeducate.com/blog/best-school-management-systems-pakistan-2026/">PakEducate's "Best School Management System Pakistan 2026: Top 10 Compared"</a> is a neutral roundup ranking for the exact money query. Getting listed is a link <em>and</em> qualified referral traffic from a buyer already comparing vendors. Pitch with a one-page spec sheet, published pricing and screenshots — roundup editors reject vendors who make them dig.</li>
+        <li><strong>Vendor directories.</strong> Capterra, SoftwareSuggest, SourceForge, GetApp, Crunchbase. Free listings, they rank in this category, and each one doubles as a <code>sameAs</code> target that corroborates your entity for section 6. Best effort-to-value ratio on this list by some distance.</li>
+        <li><strong>The parent domain.</strong> <code>orbittechlab.com</code> already ranks and has an About page describing the product line. A prominent contextual link from the homepage and About page into CampusCore costs nothing and ships today. <em>Cannot verify whether it already exists</em> — check first.</li>
+        <li><strong>Pakistani tech press.</strong> TechJuice, ProPakistani, Startup Pakistan. An independent Lahore studio shipping a school ERP against established vendors is a legitimate local story, and the founder angle carries it further than a product announcement would.</li>
+        <li><strong>Named school case studies.</strong> Every school you deploy to is a potential link — school sites routinely link to their management portal — plus a testimonial and an E-E-A-T signal. Ask at deployment, while goodwill is highest; asking twelve months later almost never works.</li>
+      </ol>
+      <p><strong>Explicitly avoid:</strong> guest-post networks and paid directory packages aimed at this niche. Pakistani edtech has a dense low-quality directory ecosystem that will take your money and move nothing.</p>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section id="priority">
+    <div class="sec-head">
+      <span class="sec-num">08</span>
+      <h2 class="sec">Prioritised actions</h2>
+    </div>
+
+    <div class="col">
+      <p>Sorted by estimated impact divided by effort. <strong>Traffic estimates are modelled, not measured</strong> — they project monthly clicks at the six-month mark assuming the fix ships and publishing continues, against a baseline of one click per 38 days. No honest audit produces precise forecasts from 37 impressions; use these for ordering, not for a budget.</p>
+      <p>The three <em>enabler</em> rows carry no direct traffic value. They are first because the rest of this report cannot be completed without them.</p>
+    </div>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Issue</th><th>Section</th><th>Severity</th><th>Est. traffic impact</th><th>Effort</th><th>Exact fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="enabler">
+            <td class="rank">E1</td>
+            <td>No crawl data exists</td>
+            <td class="num">1, 2, 3</td>
+            <td><span class="sev c">Critical</span></td>
+            <td class="num">Enabler</td>
+            <td class="num">2h</td>
+            <td>Run Screaming Frog against the site, export all. Unblocks robots/sitemap/canonical/noindex/hreflang/internal-link analysis and half of this report.</td>
+          </tr>
+          <tr class="enabler">
+            <td class="rank">E2</td>
+            <td>Indexation status unknown</td>
+            <td class="num">1</td>
+            <td><span class="sev c">Critical</span></td>
+            <td class="num">Enabler</td>
+            <td class="num">0.5h</td>
+            <td>GSC → Indexing → Pages. Record indexed vs. excluded counts and every exclusion reason. This is the diagnostic that explains the flat impression curve.</td>
+          </tr>
+          <tr class="enabler">
+            <td class="rank">E3</td>
+            <td>84% of queries invisible</td>
+            <td class="num">5</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">Enabler</td>
+            <td class="num">0.5h</td>
+            <td>Add and verify Bing Webmaster Tools. No query anonymisation — reveals the actual long tail within days.</td>
+          </tr>
+          <tr>
+            <td class="rank">1</td>
+            <td>Homepage meta truncates; title leads with dead brand equity</td>
+            <td class="num">3</td>
+            <td><span class="sev m">Medium</span></td>
+            <td class="num">~5 / mo</td>
+            <td class="num">0.5h</td>
+            <td>Title → <code>School Management System for Pakistani Schools | CampusCore</code>. Meta → the 146-char rewrite in section 3.</td>
+          </tr>
+          <tr>
+            <td class="rank">2</td>
+            <td>No entity disambiguation — six rival "CampusCore" entities</td>
+            <td class="num">6</td>
+            <td><span class="sev c">Critical</span></td>
+            <td class="num">~25 / mo</td>
+            <td class="num">3h</td>
+            <td>Ship <code>Organization</code> (with full <code>sameAs</code>), <code>SoftwareApplication</code> (PKR <code>offers</code>, <code>areaServed: "PK"</code>) and <code>WebSite</code>+<code>SearchAction</code> JSON-LD. Validate in Rich Results Test.</td>
+          </tr>
+          <tr>
+            <td class="rank">3</td>
+            <td>Absent from the roundups that own the category query</td>
+            <td class="num">7</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~30 / mo</td>
+            <td class="num">4h</td>
+            <td>Pitch PakEducate, edusuite.pk and taleempro.pk roundups with a spec sheet, published pricing and screenshots.</td>
+          </tr>
+          <tr>
+            <td class="rank">4</td>
+            <td>Index footprint flat at ~1 impression/day for six weeks</td>
+            <td class="num">1</td>
+            <td><span class="sev c">Critical</span></td>
+            <td class="num">~30 / mo</td>
+            <td class="num">4h</td>
+            <td>Act on E2: submit a clean XML sitemap, request indexing on every commercial URL, remove any stray <code>noindex</code>, fix canonicals surfaced by E1.</td>
+          </tr>
+          <tr>
+            <td class="rank">5</td>
+            <td>No FBR-compliant invoicing page — procurement blocker</td>
+            <td class="num">4</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~35 / mo</td>
+            <td class="num">5h</td>
+            <td>Publish <code>/fbr-compliant-school-fee-invoicing</code> covering tax invoice format, filing and reporting. If the product lacks it, escalate as a product gap.</td>
+          </tr>
+          <tr>
+            <td class="rank">6</td>
+            <td>Pricing not published in PKR</td>
+            <td class="num">4</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~40 / mo</td>
+            <td class="num">6h</td>
+            <td>Indexable <code>/pricing</code> with real PKR tiers and per-student rates, plus <code>Offer</code> and <code>FAQPage</code> schema. Competitors publish; buyers filter on price first.</td>
+          </tr>
+          <tr>
+            <td class="rank">7</td>
+            <td>Not listed in vendor directories</td>
+            <td class="num">7</td>
+            <td><span class="sev m">Medium</span></td>
+            <td class="num">~35 / mo</td>
+            <td class="num">6h</td>
+            <td>Submit to Capterra, SoftwareSuggest, SourceForge, GetApp, Crunchbase. Add each resulting URL to the <code>sameAs</code> array from row 2.</td>
+          </tr>
+          <tr>
+            <td class="rank">8</td>
+            <td>No pages for named payment integrations</td>
+            <td class="num">4</td>
+            <td><span class="sev c">Critical</span></td>
+            <td class="num">~60 / mo</td>
+            <td class="num">12h</td>
+            <td>One page each for JazzCash, EasyPaisa, SadaPay and HBL fee collection. Highest commercial intent in the niche — the searcher has already decided to buy.</td>
+          </tr>
+          <tr>
+            <td class="rank">9</td>
+            <td>No FAQ schema anywhere</td>
+            <td class="num">6</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~15 / mo</td>
+            <td class="num">3h</td>
+            <td>Add <code>FAQPage</code> to homepage, pricing and each feature page. Highest-yield schema for AI Overview citation.</td>
+          </tr>
+          <tr>
+            <td class="rank">10</td>
+            <td>Only blog post targets a global topic, stuck at position 18</td>
+            <td class="num">3, 4</td>
+            <td><span class="sev m">Medium</span></td>
+            <td class="num">~12 / mo</td>
+            <td class="num">3h</td>
+            <td>Retarget to Pakistani attendance workflow, new URL, 301 the old path. Full spec in section 3.</td>
+          </tr>
+          <tr>
+            <td class="rank">11</td>
+            <td>Pages not structured for AI citation</td>
+            <td class="num">6</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~20 / mo</td>
+            <td class="num">6h</td>
+            <td>Add a 40–60 word direct-answer definition under every H1; convert H2s to question form matching real queries; date all factual claims.</td>
+          </tr>
+          <tr>
+            <td class="rank">12</td>
+            <td>Product isolated on a subdomain</td>
+            <td class="num">2</td>
+            <td><span class="sev h">High</span></td>
+            <td class="num">~50 / mo</td>
+            <td class="num">20h</td>
+            <td>Migrate to <code>orbittechlab.com/campuscore/</code> with a full 301 map, or move to <code>campuscore.pk</code>. Decide now — the cost only grows.</td>
+          </tr>
+          <tr>
+            <td class="rank">13</td>
+            <td>No comparison content against named rivals</td>
+            <td class="num">4</td>
+            <td><span class="sev m">Medium</span></td>
+            <td class="num">~25 / mo</td>
+            <td class="num">10h</td>
+            <td>Publish CampusCore vs. EduSuite / Capobrain / TaleemPro pages. Factual feature and price tables, no disparagement.</td>
+          </tr>
+          <tr>
+            <td class="rank">14</td>
+            <td>No author, founder or trust signals</td>
+            <td class="num">4</td>
+            <td><span class="sev m">Medium</span></td>
+            <td class="num">~8 / mo</td>
+            <td class="num">4h</td>
+            <td>Named author bios with <code>Person</code> schema on posts; Lahore address, phone and registration in the footer; founder bios on About.</td>
+          </tr>
+          <tr>
+            <td class="rank">15</td>
+            <td>No named-school case studies</td>
+            <td class="num">4, 7</td>
+            <td><span class="sev l">Low</span></td>
+            <td class="num">~15 / mo</td>
+            <td class="num">12h</td>
+            <td>Three case studies with named schools, headmaster quotes and outcome numbers. Request a link back at deployment.</td>
+          </tr>
+          <tr>
+            <td class="rank">—</td>
+            <td>Core Web Vitals, mobile usability, render-blocking, JS rendering</td>
+            <td class="num">2</td>
+            <td><span class="sev l">Unknown</span></td>
+            <td class="num">Unknown</td>
+            <td class="num">TBD</td>
+            <td>Cannot assess — site unreachable (403 from the egress proxy) and no CrUX field data exists at this traffic level. Re-scope after E1.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col">
+      <h3>Measure the right thing</h3>
+      <p>At a baseline of one click per 38 days, <strong>judging this programme on clicks for the next 90 days will tell you nothing</strong> — the noise is larger than any plausible signal. Track these instead, in this order:</p>
+      <ol class="body">
+        <li><strong>Indexed page count</strong> (GSC → Pages). Moves first, within days.</li>
+        <li><strong>Impressions per day, 7-day rolling.</strong> The flat line in the chart above is the number that has to bend.</li>
+        <li><strong>Count of distinct queries returning impressions.</strong> Breadth before volume.</li>
+        <li><strong>Average position for <code>campuscore</code>.</strong> Position 1 is the target and it is entirely winnable — it just needs the entity work, not more content.</li>
+      </ol>
+      <p>Clicks become a fair scoreboard somewhere around month four.</p>
+    </div>
+  </section>
+
+  <!-- plan -->
+  <section id="plan">
+    <div class="sec-head">
+      <span class="sec-num">09</span>
+      <h2 class="sec">30 / 60 / 90 day plan</h2>
+    </div>
+
+    <div class="plan">
+      <div class="phase">
+        <div class="phase-k">
+          <span class="d">Days 1–30</span>
+          <span class="l">Diagnose · Own the entity</span>
+        </div>
+        <div class="phase-b">
+          <h4>Stop guessing, then make Google understand who you are</h4>
+          <ul>
+            <li>Run the crawl (E1) and pull GSC → Pages (E2). <strong>Send both to me</strong> — sections 1, 2 and the structural half of 3 get completed properly from them.</li>
+            <li>Verify Bing Webmaster Tools (E3) and let it collect for the month.</li>
+            <li>Re-export GSC Performance with the "Previous period" comparison so section 5c can be answered.</li>
+            <li>Ship the <code>Organization</code> + <code>SoftwareApplication</code> + <code>WebSite</code> schema block and validate it.</li>
+            <li>Rewrite the homepage title and meta description.</li>
+            <li>Fix every indexation blocker the Pages report surfaces; submit a clean sitemap.</li>
+            <li>Publish the PKR pricing page.</li>
+            <li><strong>Make the subdomain decision.</strong> It gets more expensive every week you defer it.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-k">
+          <span class="d">Days 31–60</span>
+          <span class="l">Build the commercial layer</span>
+        </div>
+        <div class="phase-b">
+          <h4>Publish the pages this market actually searches for</h4>
+          <ul>
+            <li>Four payment-integration pages: JazzCash, EasyPaisa, SadaPay, HBL.</li>
+            <li>The FBR-compliant invoicing page — or an internal product decision if the capability does not exist.</li>
+            <li>WhatsApp / SMS parent-communication page; Urdu interface page if the product supports it.</li>
+            <li><code>FAQPage</code> and <code>BreadcrumbList</code> schema across all commercial pages.</li>
+            <li>Direct-answer paragraphs under every H1; convert H2s to question form.</li>
+            <li>Submit to all five vendor directories; add each URL to <code>sameAs</code>.</li>
+            <li>Pitch the three roundup publishers.</li>
+            <li>Retarget the attendance post with a 301 from the old URL.</li>
+            <li>If migrating hosts, execute it here — after the schema work, before the content volume grows.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-k">
+          <span class="d">Days 61–90</span>
+          <span class="l">Authority · Comparison</span>
+        </div>
+        <div class="phase-b">
+          <h4>Compete for the shortlist, then re-measure</h4>
+          <ul>
+            <li>Three comparison pages against EduSuite, Capobrain and TaleemPro.</li>
+            <li>Three named-school case studies with link requests at publication.</li>
+            <li>Author bios, founder pages, footer trust block with the Lahore address.</li>
+            <li>Press outreach to TechJuice, ProPakistani and Startup Pakistan.</li>
+            <li>Pull the Bing query data — it will now show the real long tail. <strong>Build the month-four content plan from it, not from guesses.</strong></li>
+            <li>Re-audit against the four metrics above. If indexed pages and impressions/day have not moved by day 90, the problem is technical and sits in whatever E1 and E2 revealed — not in the content programme.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Sources for the competitive and brand-collision findings: edusuite.pk · capobrain.com · taleempro.pk · sowaanerp.com · futuresol.net · pakeducate.com · campus-core.com · campus-core.ai · campuscore.best · corecampus.com<br>
+    Search Console data: 7-file Performance export, web search type, 8 Jul – 14 Aug 2026. 1 click, 37 impressions, 2 URLs, 3 named queries, 0 rich results.<br>
+    Site crawl not performed — <code>school.orbittechlab.com</code> and <code>www.orbittechlab.com</code> both return 403 at the network egress proxy.</p>
+  </footer>
+
+</div>
