@@ -1,0 +1,329 @@
+<!--
+============================================================================
+  CampusCore / Orbit Tech Lab — JSON-LD structured data
+  Companion to audits/campuscore-seo-audit.html (priority item #2)
+
+  PURPOSE
+  This is the entity-disambiguation fix. At least six unrelated products use
+  the name "CampusCore" (campus-core.com, campus-core.ai, campuscore.best,
+  an App Store listing, a Play Store "CampusCore Suite", a LinkedIn company
+  page), plus corecampus.com on the inverted spelling. Google and the LLMs
+  currently have no way to tell which one you are. These nodes are what tell
+  them.
+
+  HOW TO USE
+  Block 1 goes in <head> on EVERY page, unchanged.
+  Blocks 2-4 are per-template — add where noted.
+  Paste the <script> blocks only. These HTML comments are notes for you and
+  should not be copied into the site.
+
+  Every value marked  «FILL:...»  must be replaced with a real value before
+  this ships. Do NOT publish with placeholders in place, and do NOT invent
+  values you cannot verify — wrong structured data is worse than none.
+
+  URLs below assume the subfolder migration in section 2 of the audit
+  (orbittechlab.com/campuscore/). If you have not migrated yet, substitute
+  your current host, then update them when you move.
+
+  VALIDATE BEFORE AND AFTER SHIPPING
+    https://search.google.com/test/rich-results
+    https://validator.schema.org/
+============================================================================
+
+
+  BLOCK 1 — SITEWIDE. Put this in <head> on every page.
+
+  Three linked nodes: the company, the product, the website. The @id values
+  are what wire them together — keep them exactly as written.
+
+  Notes on the fields that matter most:
+
+  * sameAs  is the single most important array in this file. List every
+    profile you CONTROL, as absolute URLs. Omit any you do not own — do not
+    link the other CampusCores. Delete any line you cannot fill.
+
+  * description on the SoftwareApplication node is the definitional sentence
+    an LLM will lift when asked "what is CampusCore". Keep the category, the
+    country and the module list inside it.
+
+  * featureList must be trimmed to what the product actually does today.
+    Every false entry is a trust problem, not a ranking win.
+
+  * offers uses AggregateOffer for a tiered plan. Swap to a single Offer if
+    you have one price. Publishing real PKR prices is priority item #6 in
+    the audit — buyers in this market filter on price before features.
+
+  * DO NOT add aggregateRating unless you have real, verifiable reviews
+    visible on the page. Fabricated review markup is a manual-action risk
+    and the most commonly penalised schema abuse there is.
+
+  * potentialAction (SearchAction) only belongs here if you actually have
+    working site search at that URL pattern. Remove it if you do not.
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://orbittechlab.com/#organization",
+      "name": "Orbit Tech Lab",
+      "url": "https://orbittechlab.com/",
+      "description": "Independent software studio in Lahore, Pakistan, building and operating its own products.",
+      "foundingDate": "«FILL: YYYY or YYYY-MM-DD»",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://orbittechlab.com/#logo",
+        "url": "«FILL: absolute URL to your logo, PNG or SVG, min 112x112»",
+        "caption": "Orbit Tech Lab"
+      },
+      "image": { "@id": "https://orbittechlab.com/#logo" },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "«FILL: street address»",
+        "addressLocality": "Lahore",
+        "addressRegion": "Punjab",
+        "postalCode": "«FILL: postal code»",
+        "addressCountry": "PK"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "telephone": "«FILL: +92...»",
+        "email": "«FILL: sales@orbittechlab.com»",
+        "areaServed": "PK",
+        "availableLanguage": ["en", "ur"]
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "«FILL: founder name»"
+      },
+      "sameAs": [
+        "«FILL: https://www.linkedin.com/company/...»",
+        "«FILL: https://x.com/...»",
+        "«FILL: https://www.facebook.com/...»",
+        "«FILL: https://www.crunchbase.com/organization/...»",
+        "«FILL: https://github.com/...»",
+        "«FILL: Play Store listing URL — ONLY if it is yours»",
+        "«FILL: App Store listing URL — ONLY if it is yours»"
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://orbittechlab.com/campuscore/#software",
+      "name": "CampusCore",
+      "alternateName": "CampusCore by Orbit Tech Lab",
+      "url": "https://orbittechlab.com/campuscore/",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "School Management System",
+      "operatingSystem": "Web browser",
+      "description": "CampusCore is a school management system for Pakistani schools. It handles fee collection, attendance, exams, results, payroll and parent communication across five role-based portals for administrators, teachers, parents, students and accountants.",
+      "publisher": { "@id": "https://orbittechlab.com/#organization" },
+      "author": { "@id": "https://orbittechlab.com/#organization" },
+      "inLanguage": ["en", "ur"],
+      "screenshot": "«FILL: absolute URL to a product screenshot»",
+      "featureList": [
+        "Student information management",
+        "Fee collection and invoicing",
+        "Attendance tracking",
+        "Exam scheduling and result cards",
+        "Staff payroll",
+        "Parent communication via SMS and WhatsApp",
+        "Role-based portals for admin, teacher, parent, student and accountant"
+      ],
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "PKR",
+        "lowPrice": "«FILL: cheapest paid tier, digits only e.g. 3000»",
+        "highPrice": "«FILL: top tier, digits only»",
+        "offerCount": "«FILL: number of tiers»",
+        "url": "https://orbittechlab.com/campuscore/pricing",
+        "availability": "https://schema.org/InStock",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Pakistan"
+        }
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://orbittechlab.com/#website",
+      "url": "https://orbittechlab.com/",
+      "name": "Orbit Tech Lab",
+      "publisher": { "@id": "https://orbittechlab.com/#organization" },
+      "inLanguage": "en",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://orbittechlab.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+</script>
+
+
+<!--
+  BLOCK 2 — FAQPage.
+  Add to the CampusCore home, the pricing page, and each feature page.
+
+  This is the highest-yield schema for AI Overview and chatbot citation,
+  because it maps a question directly to an answer. Write real buyer
+  questions, not marketing prompts.
+
+  RULE: every question and answer marked up here must ALSO be visible on the
+  page as readable text. Marking up FAQs a visitor cannot see is a violation
+  and Google will drop the enhancement.
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://orbittechlab.com/campuscore/#faq",
+  "isPartOf": { "@id": "https://orbittechlab.com/#website" },
+  "about": { "@id": "https://orbittechlab.com/campuscore/#software" },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is CampusCore?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CampusCore is a school management system built for Pakistani schools by Orbit Tech Lab, an independent software studio in Lahore. It covers fees, attendance, exams, results, payroll and parent communication in five role-based portals."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does CampusCore cost in Pakistan?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "«FILL: real PKR pricing, including whether it is per-student or per-school and whether a free tier exists. Buyers compare on this first.»"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does CampusCore support JazzCash and EasyPaisa fee collection?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "«FILL: answer honestly. If yes, name every supported channel — JazzCash, EasyPaisa, SadaPay, HBL, bank transfer. If no, say what you do support. This is the highest commercial-intent question in the niche.»"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is CampusCore FBR compliant for fee invoicing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "«FILL: this is a procurement blocker for Pakistani schools. If the product does not do it, that is a product decision to escalate, not a page to skip.»"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does CampusCore have an Urdu interface?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "«FILL: competitors compete directly on bilingual Urdu-English support.»"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can parents see attendance and results?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "«FILL: describe the parent portal and the SMS/WhatsApp notifications.»"
+      }
+    }
+  ]
+}
+</script>
+
+
+<!--
+  BLOCK 3 — BreadcrumbList. Add to every page below the root.
+  Cheap, and one of the few rich results a six-week-old site can win.
+  Adjust the trail per page; the last item takes no "item" URL.
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Orbit Tech Lab",
+      "item": "https://orbittechlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "CampusCore",
+      "item": "https://orbittechlab.com/campuscore/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Pricing"
+    }
+  ]
+}
+</script>
+
+
+<!--
+  BLOCK 4 — Article, for every blog post.
+
+  The author MUST be a real named Person with a real bio page. Anonymous
+  posts earn no E-E-A-T credit, and "admin" as an author is a negative
+  signal in a category where buyers are already wary of vendors.
+
+  Keep dateModified genuinely current — it is one of the few freshness
+  signals you control.
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "«FILL: post title, under 110 characters»",
+  "description": "«FILL: one-sentence summary»",
+  "image": "«FILL: absolute URL to the post's lead image»",
+  "datePublished": "«FILL: 2026-08-17T09:00:00+05:00»",
+  "dateModified": "«FILL: same format»",
+  "inLanguage": "en",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "«FILL: canonical URL of this post»"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "«FILL: real person's name»",
+    "jobTitle": "«FILL: e.g. Founder, Orbit Tech Lab»",
+    "url": "«FILL: URL of their author bio page — create one»",
+    "sameAs": ["«FILL: their LinkedIn profile»"]
+  },
+  "publisher": { "@id": "https://orbittechlab.com/#organization" },
+  "about": { "@id": "https://orbittechlab.com/campuscore/#software" }
+}
+</script>
+
+
+<!--
+============================================================================
+  NOT INCLUDED, DELIBERATELY
+
+  LocalBusiness — wrong type here. You sell software nationally; you are not
+  a premises customers visit. Organization is correct, and LocalBusiness
+  would send a geographic signal that misrepresents the business.
+
+  Product — SoftwareApplication is the more specific and correct type for a
+  SaaS product. Do not add both; they will compete as entity definitions.
+
+  Review / AggregateRating — only once real reviews exist and are visible on
+  the page. See the warning above.
+============================================================================
+-->
