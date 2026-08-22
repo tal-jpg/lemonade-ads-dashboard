@@ -81,7 +81,7 @@ export async function configureChannels(): Promise<void> {
         description: c.description,
         importance: c.importance,
         vibrationPattern: [0, 200, 100, 200],
-        lightColor: '#4F46E5',
+        lightColor: '#2AD679',
       }),
     ),
   );

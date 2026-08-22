@@ -17,10 +17,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setMode = useSettingsStore((s) => s.setThemeMode);
 
   const value = useMemo<ThemeContextValue>(() => {
-    // Light is the product's default: when the OS reports nothing, we stay
-    // light rather than flashing a dark screen.
+    // Dark is the product's default: when the OS reports nothing, we stay dark
+    // rather than flashing a light screen.
     const resolved: ResolvedScheme =
-      mode === 'system' ? (systemScheme === 'dark' ? 'dark' : 'light') : mode;
+      mode === 'system' ? (systemScheme === 'light' ? 'light' : 'dark') : mode;
     return { theme: themeFor(resolved), mode, setMode };
   }, [mode, setMode, systemScheme]);
 

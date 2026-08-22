@@ -13,8 +13,8 @@ import { updateThemePreference } from '../../services/firebase/userRepo';
 import type { ThemeMode } from '../../theme/theme';
 
 const MODES: { value: ThemeMode; label: string; icon: keyof typeof Ionicons.glyphMap; hint: string }[] = [
-  { value: 'dark', label: 'Dark', icon: 'moon-outline', hint: 'Navy focus mode for night sessions' },
-  { value: 'light', label: 'Light', icon: 'sunny-outline', hint: 'The default trading theme' },
+  { value: 'dark', label: 'Dark', icon: 'moon-outline', hint: 'The default trading theme' },
+  { value: 'light', label: 'Light', icon: 'sunny-outline', hint: 'Bright environments' },
   { value: 'system', label: 'System', icon: 'phone-portrait-outline', hint: 'Follow your device' },
 ];
 
@@ -47,7 +47,7 @@ export default function AppearanceSettings() {
           paddingBottom: insets.bottom + 32,
         }}
       >
-        <SectionHeader title="Theme" subtitle="Light is the default experience" />
+        <SectionHeader title="Theme" subtitle="Dark is the default experience" />
         <Card variant="surface" padded={false}>
           {MODES.map((option, index) => {
             const active = mode === option.value;
