@@ -21,7 +21,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: SCHEME,
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
-  primaryColor: '#C6FF3D',
+  primaryColor: '#4F46E5',
   icon: './assets/icon.png',
 
   // The splash screen is configured entirely by the expo-splash-screen plugin
@@ -55,7 +55,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
     adaptiveIcon: {
       foregroundImage: './assets/android-icon-foreground.png',
-      backgroundColor: '#050505',
+      backgroundColor: '#172033',
       monochromeImage: './assets/android-icon-monochrome.png',
     },
     permissions: [
@@ -100,14 +100,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         image: './assets/splash-icon.png',
         imageWidth: 180,
         resizeMode: 'contain',
-        backgroundColor: '#050505',
+        backgroundColor: '#F5F7FB',
       },
     ],
     [
       'expo-notifications',
       {
         icon: './assets/notification-icon.png',
-        color: '#C6FF3D',
+        color: '#4F46E5',
         defaultChannel: 'signals',
       },
     ],

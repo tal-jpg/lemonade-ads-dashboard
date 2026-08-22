@@ -29,7 +29,7 @@ type SettingsState = {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      themeMode: 'dark',
+      themeMode: 'light',
       hapticsEnabled: true,
       onboardingSeen: false,
       pushPromptShown: false,

@@ -30,7 +30,13 @@ export function Badge({ label, tone = 'neutral', icon, solid = false, style }: B
   };
 
   const { fg, bg } = map[tone];
-  const foreground = solid ? (tone === 'neutral' ? theme.colors.textPrimary : '#0A0A0A') : fg;
+  const foreground = solid
+    ? tone === 'neutral'
+      ? theme.colors.textPrimary
+      : theme.isDark
+        ? '#0B1220'
+        : '#FFFFFF'
+    : fg;
 
   return (
     <View
