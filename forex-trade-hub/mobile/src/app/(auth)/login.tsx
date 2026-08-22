@@ -138,6 +138,21 @@ export default function Login() {
           <Button label="Sign in" onPress={submit} loading={submitting} />
         </Animated.View>
 
+        <View style={styles.trustRow}>
+          {[
+            { value: '4,281', label: 'Members' },
+            { value: '68%', label: 'Win rate · 30d' },
+            { value: '24/7', label: 'Desk coverage' },
+          ].map((stat) => (
+            <View key={stat.label} style={styles.trustItem}>
+              <AppText variant="price">{stat.value}</AppText>
+              <AppText variant="caption" color="textTertiary" style={{ marginTop: 2 }}>
+                {stat.label}
+              </AppText>
+            </View>
+          ))}
+        </View>
+
         <View style={styles.footer}>
           <AppText variant="bodySm" color="textSecondary">
             New here?{' '}
@@ -160,5 +175,7 @@ const styles = StyleSheet.create({
   logo: { width: 56, height: 56, alignItems: 'center', justifyContent: 'center' },
   forgot: { alignSelf: 'flex-end' },
   errorBox: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12 },
-  footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 'auto', paddingTop: 32 },
+  trustRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 36 },
+  trustItem: { alignItems: 'center', flex: 1 },
+  footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 'auto', paddingTop: 28 },
 });

@@ -469,6 +469,120 @@ td .muted, .cell-sub { font-size: 11.5px; color: #8194a8; }
 .alert-error   { background: var(--danger-soft); border-color: rgba(239, 68, 68, 0.22); }
 .alert-warning { background: var(--warning-soft); border-color: rgba(245, 158, 11, 0.22); }
 
+/* -------------------------------------------------------------------- auth */
+
+.auth { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 100vh; }
+
+/* --- left: the brand story --- */
+.auth-brand {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 56px clamp(36px, 5vw, 76px);
+  background:
+    radial-gradient(circle at 78% 12%, rgba(0, 184, 230, 0.20), transparent 45%),
+    radial-gradient(circle at 12% 78%, rgba(108, 59, 255, 0.22), transparent 45%),
+    linear-gradient(155deg, #08243b 0%, #061525 45%, #020d1a 100%);
+  border-right: 1px solid var(--border-soft);
+}
+/* faint grid, so the panel reads as a product surface rather than a poster */
+.auth-brand::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 30% 40%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 10%, transparent 72%);
+}
+.auth-brand > * { position: relative; z-index: 1; }
+
+.auth-lockup { display: flex; align-items: center; gap: 12px; margin-bottom: clamp(34px, 6vh, 64px); }
+.auth-lockup .brand-mark { width: 42px; height: 42px; font-size: 12px; }
+.auth-lockup .name { font-size: 21px; font-weight: 600; letter-spacing: -0.4px; color: #fff; }
+.auth-lockup .name em { font-style: normal; color: var(--primary-bright); }
+
+.auth-title {
+  font-size: clamp(30px, 3.4vw, 44px); font-weight: 600; line-height: 1.12;
+  letter-spacing: -1px; margin: 0; color: #fff; text-wrap: balance; max-width: 16ch;
+}
+.auth-title em { font-style: normal; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.auth-lede { color: var(--text-secondary); font-size: 15px; line-height: 1.65; margin: 16px 0 0; max-width: 46ch; }
+
+.auth-features { list-style: none; margin: clamp(26px, 4vh, 38px) 0 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.auth-features li { display: flex; align-items: flex-start; gap: 11px; font-size: 14px; color: var(--text-secondary); }
+.auth-features .tick {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; margin-top: 1px;
+  display: grid; place-items: center;
+  background: var(--primary-soft); border: 1px solid rgba(0, 212, 255, 0.28); color: var(--primary-bright);
+}
+.auth-features .tick svg { width: 11px; height: 11px; }
+
+.auth-stats { display: flex; gap: clamp(26px, 4vw, 52px); margin-top: clamp(34px, 6vh, 56px); }
+.auth-stat-value {
+  font-family: var(--mono); font-size: clamp(24px, 2.4vw, 30px); font-weight: 700;
+  letter-spacing: -1px; color: #fff; font-variant-numeric: tabular-nums;
+}
+.auth-stat-value span { color: var(--primary-bright); }
+.auth-stat-label { font-size: 10.5px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-top: 5px; }
+
+/* floating glass chips, echoing the product's iconography */
+.auth-chip {
+  position: absolute; display: grid; place-items: center;
+  width: 54px; height: 54px; border-radius: var(--r-xl);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: var(--primary-bright); z-index: 0;
+}
+.auth-chip svg { width: 22px; height: 22px; }
+.auth-chip-1 { top: 13%; right: 12%; }
+.auth-chip-2 { top: 38%; right: 24%; color: var(--purple-light); }
+.auth-chip-3 { bottom: 18%; right: 15%; color: var(--text-secondary); }
+
+/* --- right: the form --- */
+.auth-form {
+  position: relative; display: grid; place-items: center; padding: 40px 24px;
+  background: radial-gradient(circle at 62% 46%, rgba(0, 184, 230, 0.09), transparent 58%);
+}
+.auth-card {
+  position: relative; width: 100%; max-width: 400px;
+  background: var(--surface); border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: var(--r-xl); padding: clamp(26px, 3vw, 34px);
+  box-shadow: var(--shadow-pop), 0 0 60px rgba(0, 184, 230, 0.06);
+}
+.auth-card-lockup { display: none; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; }
+.auth-card-lockup .brand-mark { width: 32px; height: 32px; font-size: 9.5px; }
+.auth-card-lockup .name { font-size: 16.5px; }
+.auth-heading { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; margin: 0; color: var(--text-primary); }
+.auth-sub { color: var(--text-muted); font-size: 13.5px; margin: 6px 0 24px; }
+.auth-fields { display: flex; flex-direction: column; gap: 15px; }
+.auth-card .btn { width: 100%; height: 42px; font-size: 14px; margin-top: 3px; }
+
+.pw-wrap { position: relative; }
+.pw-wrap .input { padding-right: 40px; }
+.pw-toggle {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  width: 30px; height: 30px; display: grid; place-items: center;
+  background: none; border: none; border-radius: var(--r-sm); cursor: pointer;
+  color: var(--text-muted); transition: color var(--ease), background var(--ease);
+}
+.pw-toggle:hover { color: var(--primary-bright); background: rgba(0, 212, 255, 0.08); }
+.pw-toggle svg { width: 16px; height: 16px; }
+
+.auth-divider { height: 1px; background: var(--border-soft); margin: 22px 0 16px; }
+.auth-note { text-align: center; font-size: 12.5px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+.auth-note code {
+  font-family: var(--mono); font-size: 11.5px; color: var(--primary-bright);
+  background: var(--primary-soft); border-radius: var(--r-xs); padding: 1px 5px;
+}
+
+@media (max-width: 980px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-brand { display: none; }
+  .auth-form { min-height: 100vh; }
+  .auth-card-lockup { display: flex; }
+}
+
 /* ------------------------------------------------------------------- login */
 
 .login-page { display: grid; place-items: center; min-height: 100vh; padding: 24px; }
