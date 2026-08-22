@@ -17,7 +17,7 @@ const PLAY_STORE_URL =
 
 const FEATURES = [
   {
-    title: 'Signals with the full picture',
+    title: 'Signals you can act on',
     body: 'Entry, stop loss and every take-profit level, with the technical and fundamental read behind the trade — not just an alert.',
     icon: <path d="M2 12h4l3-8 4 16 3-8h6" />,
   },
@@ -115,16 +115,16 @@ export function Landing() {
         <div className="lp-wrap lp-hero-inner">
           <div>
             <span className="lp-eyebrow">
-              <b>New</b> Signals, education and community in one app
+              <b>New</b> The Android app is out now
             </span>
 
             <h1 className="lp-title">
-              Trade with the <em>full picture</em>.
+              Every setup, every lesson, <em>one trading floor</em>.
             </h1>
             <p className="lp-lede">
-              Forex Trade Hub publishes every setup with its entry, stop loss and targets — plus the
-              analysis behind it, a moderated trading floor, and a course library that takes you from
-              the basics to SMC and ICT.
+              Every signal arrives with its entry, stop loss and targets — and the reasoning behind
+              it. Ask the desk on the floor while the trade is live, then work through the course
+              library at your own pace.
             </p>
 
             <div className="lp-cta">
