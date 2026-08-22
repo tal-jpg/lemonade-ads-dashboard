@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { HeroChart } from '../components/HeroChart';
 
 /**
  * Public landing page — the site's front door.
@@ -135,65 +136,7 @@ export function Landing() {
             <p className="lp-cta-note">Free plan available · No card required to start</p>
           </div>
 
-          {/* a small, honest preview of the product rather than a stock image */}
-          <div className="lp-device" aria-hidden="true">
-            <div className="lp-screen">
-              <div className="row">
-                <div>
-                  <div className="greet">Good morning</div>
-                  <div className="who">Alex</div>
-                </div>
-                <span className="badge badge-premium">Premium</span>
-              </div>
-
-              <div className="lp-mini">
-                <div className="row">
-                  <span className="pair">XAU/USD</span>
-                  <span className="badge badge-profit">Buy</span>
-                </div>
-                <div className="lp-levels">
-                  <div>
-                    <span>Entry</span>
-                    <b>2412.50</b>
-                  </div>
-                  <div>
-                    <span>Stop</span>
-                    <b style={{ color: 'var(--danger)' }}>2398.00</b>
-                  </div>
-                  <div>
-                    <span>Target</span>
-                    <b style={{ color: 'var(--success)' }}>2431.00</b>
-                  </div>
-                </div>
-              </div>
-
-              <div className="lp-mini" style={{ borderLeftColor: 'var(--danger)' }}>
-                <div className="row">
-                  <span className="pair">GBP/JPY</span>
-                  <span className="badge badge-loss">Sell</span>
-                </div>
-                <div className="lp-levels">
-                  <div>
-                    <span>Entry</span>
-                    <b>193.40</b>
-                  </div>
-                  <div>
-                    <span>Stop</span>
-                    <b style={{ color: 'var(--danger)' }}>194.10</b>
-                  </div>
-                  <div>
-                    <span>Target</span>
-                    <b style={{ color: 'var(--success)' }}>192.20</b>
-                  </div>
-                </div>
-              </div>
-
-              <div className="row" style={{ marginTop: 2 }}>
-                <span className="badge badge-primary">Daily brief</span>
-                <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Updated 08:14</span>
-              </div>
-            </div>
-          </div>
+          <HeroChart />
         </div>
       </section>
 
