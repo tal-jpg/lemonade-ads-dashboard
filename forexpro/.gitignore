@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+backend/functions/lib/
+.expo/
+web-build/
+mobile/android/
+mobile/ios/
+*.tsbuildinfo
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+service-account.json
+*-service-account.json
+play-service-account.json
+*.p8
+*.p12
+*.keystore
+*.jks
+
+# Firebase app config (identifies your project; supply via CI secrets)
+mobile/google-services.json
+mobile/GoogleService-Info.plist
+
+# Firebase tooling
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+pubsub-debug.log
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+*.log
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

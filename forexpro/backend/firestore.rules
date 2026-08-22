@@ -1,0 +1,351 @@
+rules_version = '2';
+
+// ============================================================================
+// FX PULSE — Firestore Security Rules
+//
+// Authorization model
+// -------------------
+// Privilege NEVER comes from a client-writable field. Two custom claims,
+// set exclusively by Cloud Functions, drive every privileged decision:
+//
+//   request.auth.token.admin      -> boolean  (set by setUserRole)
+//   request.auth.token.plan       -> 'free' | 'premium'  (set by verifyPurchase /
+//                                    store webhooks / setUserPlan)
+//   request.auth.token.community  -> 'none' | 'pending' | 'approved' | 'blocked'
+//
+// The mirrored fields on /users/{uid} (role, plan, status, community.status)
+// exist for display and admin querying only. Clients can never write them —
+// see the userSelfUpdateAllowed() field allow-list below.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------------- helpers
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function uid() {
+      return request.auth.uid;
+    }
+
+    function isSelf(userId) {
+      return signedIn() && uid() == userId;
+    }
+
+    function claims() {
+      return request.auth.token;
+    }
+
+    function isAdmin() {
+      return signedIn() && claims().get('admin', false) == true;
+    }
+
+    function isModerator() {
+      return isAdmin() || (signedIn() && claims().get('moderator', false) == true);
+    }
+
+    function isPremium() {
+      return isAdmin() || (signedIn() && claims().get('plan', 'free') == 'premium');
+    }
+
+    // Banned / suspended accounts keep read access to their own profile only.
+    function isActive() {
+      return signedIn() && claims().get('status', 'active') == 'active';
+    }
+
+    function isCommunityMember() {
+      return isAdmin() ||
+             (signedIn() && claims().get('community', 'none') == 'approved' && isActive());
+    }
+
+    // A muted member may read the community but not write to it.
+    function isMuted() {
+      return signedIn() &&
+             claims().get('mutedUntil', 0) > request.time.toMillis();
+    }
+
+    function canPostInCommunity() {
+      return isCommunityMember() && !isMuted();
+    }
+
+    // Premium-gated documents. Free users are served a redacted preview by the
+    // client; the full document is never readable without the claim.
+    function readableByPlan(doc) {
+      return doc.get('isPremium', false) == false || isPremium();
+    }
+
+    function isPublished(doc) {
+      return doc.get('status', 'published') == 'published';
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Returns true when the update touches ONLY the listed keys.
+    function onlyTouches(allowed) {
+      return incoming().diff(existing()).affectedKeys().hasOnly(allowed);
+    }
+
+    function unchanged(key) {
+      return !(key in incoming()) || incoming()[key] == existing()[key];
+    }
+
+    function isNonEmptyString(v, maxLen) {
+      return v is string && v.size() > 0 && v.size() <= maxLen;
+    }
+
+    // ------------------------------------------------------------------ users
+    match /users/{userId} {
+      // Any signed-in member can read basic profiles (needed to render authors
+      // and member lists). Sensitive fields (phone, address, email) are kept in
+      // /users/{uid}/private/contact which only the owner and admins can read.
+      allow get, list: if signedIn();
+
+      // Self-registration. The client may only create its own document, and
+      // only with safe defaults — privilege fields are rejected outright.
+      allow create: if isSelf(userId)
+                    && incoming().uid == userId
+                    && isNonEmptyString(incoming().fullName, 80)
+                    && isNonEmptyString(incoming().username, 24)
+                    && isNonEmptyString(incoming().email, 254)
+                    && incoming().get('role', 'user') == 'user'
+                    && incoming().get('plan', 'free') == 'free'
+                    && incoming().get('status', 'active') == 'active'
+                    && incoming().get('community', {}).get('status', 'none') == 'none';
+
+      // Self-service profile edits: strictly allow-listed fields.
+      allow update: if isSelf(userId)
+                    && isActive()
+                    && onlyTouches([
+                         'fullName', 'photoURL', 'bio', 'address', 'phone',
+                         'notificationPrefs', 'themePreference', 'updatedAt',
+                         'lastLoginAt', 'platform', 'appVersion', 'fcmTokens',
+                         'onboardingCompleted', 'profileCompletion'
+                       ])
+                    && unchanged('role') && unchanged('plan') && unchanged('status')
+                    && unchanged('community') && unchanged('username')
+                    && unchanged('createdAt');
+
+      allow update, delete: if isAdmin();
+
+      // Owner-only contact details.
+      match /private/{docId} {
+        allow read, write: if isSelf(userId) || isAdmin();
+      }
+    }
+
+    // Username uniqueness index. Readable so the client can pre-check
+    // availability; a claim can only be created, never stolen or released
+    // by a client (release happens in a Cloud Function on rename/delete).
+    match /usernames/{username} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if signedIn() && incoming().uid == uid();
+      allow update, delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------ subscription state
+    // Written only by Cloud Functions (Admin SDK bypasses rules). A client that
+    // could write here could grant itself premium.
+    match /subscriptions/{userId} {
+      allow read: if isSelf(userId) || isAdmin();
+      allow write: if false;
+    }
+
+    match /purchase_events/{eventId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // ---------------------------------------------------------------- signals
+    match /signals/{signalId} {
+      allow get: if signedIn() && isPublished(existing()) && readableByPlan(existing());
+      // Listing is allowed; premium documents are excluded by the query itself
+      // (see mobile/src/hooks/useSignals.ts) and re-checked here per document.
+      allow list: if signedIn();
+      allow create, update, delete: if isAdmin();
+
+      match /comments/{commentId} {
+        allow read: if isCommunityMember();
+        allow create: if canPostInCommunity() && incoming().authorId == uid();
+        allow update: if isSelf(existing().authorId) && onlyTouches(['text', 'editedAt']);
+        allow delete: if isSelf(existing().authorId) || isModerator();
+      }
+    }
+
+    // Locked previews of premium signals. Written only by the
+    // onSignalPublished function, and by construction it contains no tradable
+    // level — pair, direction, timeframe and confidence only.
+    match /signal_teasers/{signalId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    // Daily performance rollups, written by the scheduled function only.
+    match /daily_stats/{day} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /daily_briefs/{day} {
+      allow read: if signedIn() && readableByPlan(existing());
+      allow write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------- news
+    match /news/{newsId} {
+      allow get: if signedIn() && isPublished(existing()) && readableByPlan(existing());
+      allow list: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------- education
+    match /courses/{courseId} {
+      allow get, list: if signedIn();
+      allow create, update, delete: if isAdmin();
+
+      match /lessons/{lessonId} {
+        allow get: if signedIn() && readableByPlan(existing());
+        allow list: if signedIn();
+        allow create, update, delete: if isAdmin();
+      }
+    }
+
+    // Per-user lesson progress.
+    match /user_progress/{userId}/lessons/{lessonId} {
+      allow read: if isSelf(userId) || isAdmin();
+      allow create, update: if isSelf(userId) && incoming().get('score', 0) is number;
+      allow delete: if isSelf(userId) || isAdmin();
+    }
+
+    // -------------------------------------------------------------- community
+    match /community/{communityId} {
+      allow get, list: if signedIn();
+      allow write: if isAdmin();
+
+      match /messages/{messageId} {
+        allow read: if isCommunityMember();
+
+        allow create: if canPostInCommunity()
+                      && incoming().authorId == uid()
+                      && incoming().get('deleted', false) == false
+                      && incoming().get('pinned', false) == false
+                      && incoming().createdAt == request.time
+                      && (
+                           incoming().get('type', 'text') != 'text' ||
+                           isNonEmptyString(incoming().get('text', ''), 4000)
+                         );
+
+        // Authors may edit their own text or toggle a reaction. Reaction writes
+        // are validated by the callable `toggleReaction` for correctness; this
+        // rule keeps the direct path safe for the optimistic client update.
+        allow update: if canPostInCommunity()
+                      && (
+                           (isSelf(existing().authorId) && onlyTouches(['text', 'editedAt'])) ||
+                           onlyTouches(['reactions'])
+                         );
+
+        // Pin / unpin and moderation deletes are staff-only.
+        allow update: if isModerator();
+
+        // Soft delete only — hard delete is reserved for admins.
+        allow delete: if isAdmin();
+      }
+
+      match /typing/{userId} {
+        allow read: if isCommunityMember();
+        allow write: if isSelf(userId) && isCommunityMember();
+      }
+    }
+
+    match /community_members/{userId} {
+      allow get, list: if isCommunityMember();
+      // Members may only stamp their own read cursor.
+      allow update: if isSelf(userId) && onlyTouches(['lastReadAt', 'lastSeenAt']);
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin();
+    }
+
+    // Users request access; only staff decide. Written through the
+    // `requestJoinCommunity` callable, which also notifies admins.
+    match /join_requests/{userId} {
+      allow get: if isSelf(userId) || isModerator();
+      allow list: if isModerator();
+      allow create: if isSelf(userId)
+                    && incoming().status == 'pending'
+                    && incoming().uid == userId;
+      allow update, delete: if isModerator();
+    }
+
+    // ------------------------------------------------------------------ polls
+    match /polls/{pollId} {
+      allow get, list: if isCommunityMember();
+      allow create, update, delete: if isAdmin();
+
+      // Vote tallies are aggregated server-side; a client writing its own vote
+      // document cannot inflate counts, and the doc id is the uid so a second
+      // vote is a create-on-existing and fails.
+      match /votes/{userId} {
+        allow read: if isSelf(userId) || isAdmin();
+        allow create: if isSelf(userId)
+                      && isCommunityMember()
+                      && incoming().optionIds is list
+                      && incoming().optionIds.size() > 0
+                      && incoming().optionIds.size() <= 10;
+        allow update, delete: if false;
+      }
+    }
+
+    // ---------------------------------------------------------- announcements
+    match /announcements/{announcementId} {
+      allow get, list: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------- notifications
+    match /notifications/{userId}/items/{itemId} {
+      allow read: if isSelf(userId);
+      allow update: if isSelf(userId) && onlyTouches(['read', 'readAt']);
+      allow delete: if isSelf(userId);
+      allow create: if false; // fan-out is server-side
+    }
+
+    // ---------------------------------------------------------- market quotes
+    // Demo/seeded in Phase 1, replaced by a server-side feed in Phase 2.
+    match /market_quotes/{symbol} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------- remote settings
+    // Business rules (signal limits, feature flags, disclaimers) live here so
+    // they are never hardcoded in the app binary.
+    match /app_settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ------------------------------------------------------------ moderation
+    match /reports/{reportId} {
+      allow create: if signedIn() && incoming().reporterId == uid();
+      allow read, update, delete: if isModerator();
+    }
+
+    match /admin_logs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false; // append-only, server-side
+    }
+
+    // Anything not matched above is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

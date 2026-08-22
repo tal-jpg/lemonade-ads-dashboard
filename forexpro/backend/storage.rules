@@ -1,0 +1,111 @@
+rules_version = '2';
+
+// ============================================================================
+// FX PULSE — Cloud Storage Security Rules
+//
+// Every write path is constrained by owner, content-type and size. Admin-only
+// buckets (signal charts, course media, news images) reject client writes from
+// non-staff regardless of path guessing.
+// ============================================================================
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function uid() {
+      return request.auth.uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.get('admin', false) == true;
+    }
+
+    function isPremium() {
+      return isAdmin() || (signedIn() && request.auth.token.get('plan', 'free') == 'premium');
+    }
+
+    function isCommunityMember() {
+      return isAdmin() ||
+             (signedIn() && request.auth.token.get('community', 'none') == 'approved');
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp|heic|heif)');
+    }
+
+    function isVideo() {
+      return request.resource.contentType.matches('video/(mp4|quicktime|webm)');
+    }
+
+    function isAudio() {
+      return request.resource.contentType.matches('audio/(mpeg|mp4|aac|m4a|wav|webm)');
+    }
+
+    function isDocument() {
+      return request.resource.contentType.matches('application/(pdf|msword|vnd.*)')
+             || request.resource.contentType == 'text/plain';
+    }
+
+    function underMB(n) {
+      return request.resource.size < n * 1024 * 1024;
+    }
+
+    // ------------------------------------------------------------- avatars
+    match /avatars/{userId}/{fileName} {
+      allow read: if signedIn();
+      allow write: if signedIn() && uid() == userId && isImage() && underMB(5);
+      allow delete: if signedIn() && uid() == userId;
+    }
+
+    // --------------------------------------------------- community uploads
+    match /community/{userId}/images/{fileName} {
+      allow read: if isCommunityMember();
+      allow write: if isCommunityMember() && uid() == userId && isImage() && underMB(10);
+    }
+
+    match /community/{userId}/videos/{fileName} {
+      allow read: if isCommunityMember();
+      allow write: if isCommunityMember() && uid() == userId && isVideo() && underMB(50);
+    }
+
+    match /community/{userId}/audio/{fileName} {
+      allow read: if isCommunityMember();
+      allow write: if isCommunityMember() && uid() == userId && isAudio() && underMB(15);
+    }
+
+    match /community/{userId}/files/{fileName} {
+      allow read: if isCommunityMember();
+      allow write: if isCommunityMember() && uid() == userId && isDocument() && underMB(20);
+    }
+
+    // ------------------------------------------------------ staff-published
+    match /signals/{fileName} {
+      allow read: if signedIn();
+      allow write: if isAdmin() && isImage() && underMB(10);
+    }
+
+    match /news/{fileName} {
+      allow read: if signedIn();
+      allow write: if isAdmin() && isImage() && underMB(10);
+    }
+
+    match /courses/{courseId}/{fileName} {
+      // Premium lesson media is gated; the free preview uses a separate
+      // /courses/{courseId}/preview/ prefix.
+      allow read: if signedIn();
+      allow write: if isAdmin() && (isImage() || isVideo() || isDocument() || isAudio()) && underMB(200);
+    }
+
+    match /courses/{courseId}/premium/{fileName} {
+      allow read: if isPremium();
+      allow write: if isAdmin() && underMB(200);
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
