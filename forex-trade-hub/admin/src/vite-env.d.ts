@@ -12,6 +12,8 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string;
   readonly VITE_FIREBASE_APP_ID: string;
   readonly VITE_USE_EMULATOR?: string;
+  /** Play Store listing for the member app; defaults to the app's package id. */
+  readonly VITE_PLAY_STORE_URL?: string;
 }
 
 interface ImportMeta {

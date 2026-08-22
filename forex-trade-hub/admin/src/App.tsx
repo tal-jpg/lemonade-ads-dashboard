@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { ToastProvider } from './components/ui';
 import { Layout } from './components/Layout';
+import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Users } from './pages/Users';
@@ -17,9 +18,10 @@ import { Settings } from './pages/Settings';
 /**
  * Route table.
  *
- * Everything except /login sits behind the admin guard. The guard is a
- * convenience — the real enforcement is the security rules, which reject the
- * underlying reads without the admin claim regardless of what renders.
+ * `/` is the public site and `/login` is the door; everything under `/admin`
+ * sits behind the admin guard. The guard is a convenience — the real
+ * enforcement is the security rules, which reject the underlying reads without
+ * the admin claim regardless of what renders.
  */
 function Guarded({ children }: { children: React.ReactNode }) {
   const { user, isAdmin, loading } = useAuth();
@@ -41,8 +43,10 @@ export function App() {
       <ToastProvider>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route
+              path="/admin"
               element={
                 <Guarded>
                   <Layout />

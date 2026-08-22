@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const FEATURES = [
@@ -29,7 +29,7 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  if (!loading && user && isAdmin) return <Navigate to="/" replace />;
+  if (!loading && user && isAdmin) return <Navigate to="/admin" replace />;
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -180,6 +180,8 @@ export function Login() {
           <div className="auth-divider" />
           <p className="auth-note">
             Administrator access only — granted with the <code>admin</code> claim.
+            <br />
+            <Link to="/">Back to forextradehub.app</Link>
           </p>
         </div>
       </main>

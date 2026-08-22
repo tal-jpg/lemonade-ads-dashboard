@@ -11,15 +11,15 @@ import { Avatar } from './ui';
  */
 
 const NAV = [
-  { to: '/', label: 'Overview', icon: '◲', end: true },
-  { to: '/users', label: 'Users', icon: '☰' },
-  { to: '/signals', label: 'Signals', icon: '⇅' },
-  { to: '/news', label: 'News', icon: '❏' },
-  { to: '/courses', label: 'Education', icon: '✦' },
-  { to: '/community', label: 'Community', icon: '◍' },
-  { to: '/polls', label: 'Polls', icon: '▤' },
-  { to: '/subscriptions', label: 'Subscriptions', icon: '◈' },
-  { to: '/settings', label: 'Settings', icon: '⚙' },
+  { to: '/admin', label: 'Overview', icon: '◲', end: true },
+  { to: '/admin/users', label: 'Users', icon: '☰' },
+  { to: '/admin/signals', label: 'Signals', icon: '⇅' },
+  { to: '/admin/news', label: 'News', icon: '❏' },
+  { to: '/admin/courses', label: 'Education', icon: '✦' },
+  { to: '/admin/community', label: 'Community', icon: '◍' },
+  { to: '/admin/polls', label: 'Polls', icon: '▤' },
+  { to: '/admin/subscriptions', label: 'Subscriptions', icon: '◈' },
+  { to: '/admin/settings', label: 'Settings', icon: '⚙' },
 ];
 
 export function Layout() {
@@ -56,7 +56,7 @@ export function Layout() {
             >
               <span aria-hidden>{item.icon}</span>
               {item.label}
-              {item.to === '/community' && pending.length > 0 && (
+              {item.to === '/admin/community' && pending.length > 0 && (
                 <span className="nav-badge">{pending.length}</span>
               )}
             </NavLink>
