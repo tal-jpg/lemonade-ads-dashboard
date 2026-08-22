@@ -167,17 +167,17 @@ export function Dashboard() {
                   <stop offset="100%" stopColor="#2AD679" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#1B2F23" vertical={false} />
-              <XAxis dataKey="day" stroke="#66816F" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#66816F" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+              <CartesianGrid stroke="#1B4A30" vertical={false} />
+              <XAxis dataKey="day" stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
-                  background: '#1D3527',
-                  border: '1px solid #2E4A39',
+                  background: '#143826',
+                  border: '1px solid #2A6242',
                   borderRadius: 10,
                   fontSize: 12,
                 }}
-                labelStyle={{ color: '#9DB4A6' }}
+                labelStyle={{ color: '#A9C4B2' }}
               />
               <Area type="monotone" dataKey="count" stroke="#2AD679" strokeWidth={2} fill="url(#growthFill)" />
             </AreaChart>
@@ -191,13 +191,13 @@ export function Dashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={performance} margin={{ top: 4, right: 8, left: -22, bottom: 0 }}>
-                <CartesianGrid stroke="#1B2F23" vertical={false} />
-                <XAxis dataKey="day" stroke="#66816F" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#66816F" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                <CartesianGrid stroke="#1B4A30" vertical={false} />
+                <XAxis dataKey="day" stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
-                    background: '#1D3527',
-                    border: '1px solid #2E4A39',
+                    background: '#143826',
+                    border: '1px solid #2A6242',
                     borderRadius: 10,
                     fontSize: 12,
                   }}

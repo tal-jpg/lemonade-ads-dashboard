@@ -11,6 +11,8 @@ export type ColorPalette = {
   bg: string;
   /** Slightly lifted background used for scroll containers and sheets. */
   bgAlt: string;
+  /** Three-stop gradient painted behind screens (rich to deep). */
+  bgGradient: readonly [string, string, string];
   /** Default card / panel surface. */
   surface: string;
   /** Surface one step up (nested cards, inputs). */
@@ -75,16 +77,17 @@ export type ColorPalette = {
 };
 
 export const darkColors: ColorPalette = {
-  bg: '#0A1710',
-  bgAlt: '#0D1C14',
-  surface: '#122419',
-  surfaceAlt: '#172C1F',
-  surfaceHigh: '#1D3527',
-  scrim: 'rgba(2, 10, 6, 0.66)',
+  bg: '#123F29',
+  bgAlt: '#0E3322',
+  bgGradient: ['#218758', '#123F29', '#0A2318'],
+  surface: '#0B2519',
+  surfaceAlt: '#0F2E1F',
+  surfaceHigh: '#143826',
+  scrim: 'rgba(3, 14, 8, 0.66)',
 
-  border: '#20362A',
-  borderStrong: '#2E4A39',
-  divider: '#182B1F',
+  border: '#1D4A31',
+  borderStrong: '#2A6242',
+  divider: '#123122',
 
   primary: '#2AD679',
   primaryDark: '#1EA85D',
@@ -107,33 +110,34 @@ export const darkColors: ColorPalette = {
   premiumGradient: ['#F5C451', '#C9922B'],
 
   textPrimary: '#F2F7F3',
-  textSecondary: '#9DB4A6',
-  textTertiary: '#66816F',
-  textInverse: '#0A1710',
-  textDisabled: '#3A4F42',
+  textSecondary: '#A9C4B2',
+  textTertiary: '#6F8F7B',
+  textInverse: '#0A2318',
+  textDisabled: '#3F5C4B',
 
   gradientPrimary: ['#3AE68C', '#1FB566'],
-  gradientSurface: ['#152920', '#0F2016'],
+  gradientSurface: ['#0F2E1F', '#0A2216'],
   gradientProfit: ['rgba(42, 214, 121, 0.20)', 'rgba(42, 214, 121, 0.02)'],
   gradientLoss: ['rgba(246, 70, 93, 0.20)', 'rgba(246, 70, 93, 0.02)'],
 
-  skeleton: '#152920',
-  skeletonHighlight: '#1D3527',
+  skeleton: '#0F2E1F',
+  skeletonHighlight: '#143826',
 
-  chartGrid: '#1B2F23',
+  chartGrid: '#1B4A30',
   chartLine: '#2AD679',
   chartFillTop: 'rgba(42, 214, 121, 0.24)',
   chartFillBottom: 'rgba(42, 214, 121, 0)',
 
-  tabBarBg: 'rgba(8, 18, 12, 0.94)',
-  tabBarBorder: '#182B1F',
+  tabBarBg: 'rgba(7, 26, 17, 0.94)',
+  tabBarBorder: '#123122',
   tabBarActive: '#2AD679',
-  tabBarInactive: '#66816F',
+  tabBarInactive: '#6F8F7B',
 };
 
 export const lightColors: ColorPalette = {
   bg: '#F3FAF5',
   bgAlt: '#FFFFFF',
+  bgGradient: ['#F8FCF9', '#EFF8F2', '#E4F2E9'],
   surface: '#FFFFFF',
   surfaceAlt: '#EBF5EE',
   surfaceHigh: '#DFEEE4',

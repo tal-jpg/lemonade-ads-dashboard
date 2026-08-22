@@ -8,6 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../theme/ThemeProvider';
 
 export type ScreenProps = {
@@ -61,6 +62,13 @@ export function Screen({
         testID={testID}
         style={[styles.flex, { backgroundColor: theme.colors.bg, paddingTop }, style]}
       >
+        <LinearGradient
+          colors={theme.colors.bgGradient as unknown as [string, string, string]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0.7, y: 1 }}
+          style={StyleSheet.absoluteFill}
+          pointerEvents="none"
+        />
         <ScrollView
           contentContainerStyle={[inner, { paddingBottom: paddingBottom + theme.spacing.xl }]}
           showsVerticalScrollIndicator={false}
@@ -88,6 +96,13 @@ export function Screen({
       testID={testID}
       style={[styles.flex, { backgroundColor: theme.colors.bg, paddingTop, paddingBottom }, style]}
     >
+      <LinearGradient
+        colors={theme.colors.bgGradient as unknown as [string, string, string]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0.7, y: 1 }}
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
+      />
       <View style={[styles.flex, inner]}>{children}</View>
     </View>
   );

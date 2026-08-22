@@ -7,14 +7,15 @@
 
 :root {
   /* Surfaces */
-  --bg: #0a1710;
-  --bg-alt: #0d1c14;
-  --surface: #122419;
-  --surface-alt: #172c1f;
-  --surface-high: #1d3527;
-  --border: #20362a;
-  --border-strong: #2e4a39;
-  --divider: #182b1f;
+  --bg: #123f29;
+  --bg-grad: linear-gradient(160deg, #218758 0%, #123f29 45%, #0a2318 100%);
+  --bg-alt: #0e3322;
+  --surface: #0b2519;
+  --surface-alt: #0f2e1f;
+  --surface-high: #143826;
+  --border: #1d4a31;
+  --border-strong: #2a6242;
+  --divider: #123122;
 
   /* Brand */
   --primary: #2ad679;
@@ -39,9 +40,9 @@
 
   /* Text */
   --text: #f2f7f3;
-  --text-secondary: #9db4a6;
-  --text-tertiary: #66816f;
-  --placeholder: #66816f;
+  --text-secondary: #a9c4b2;
+  --text-tertiary: #6f8f7b;
+  --placeholder: #6f8f7b;
 
   /* Shape & depth */
   --radius-sm: 8px;
@@ -63,7 +64,7 @@ html, body, #root { height: 100%; }
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg);
+  background: var(--bg-grad) fixed var(--bg);
   color: var(--text);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
@@ -81,7 +82,7 @@ a:hover { text-decoration: underline; }
 .sidebar {
   width: var(--sidebar-width);
   flex-shrink: 0;
-  background: var(--bg-alt);
+  background: var(--surface);
   border-right: 1px solid var(--border);
   padding: 20px 14px;
   display: flex;
@@ -109,7 +110,7 @@ a:hover { text-decoration: underline; }
   color: var(--text-secondary); font-weight: 500; font-size: 13.5px;
   transition: background 120ms, color 120ms;
 }
-.nav-link:hover { background: var(--surface); color: var(--text); text-decoration: none; }
+.nav-link:hover { background: var(--surface-alt); color: var(--text); text-decoration: none; }
 .nav-link.active { background: var(--primary-muted); color: var(--primary); }
 .nav-badge {
   margin-left: auto; background: var(--loss); color: #fff;
@@ -122,7 +123,8 @@ a:hover { text-decoration: underline; }
   height: 60px; flex-shrink: 0;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; background: var(--bg-alt);
+  padding: 0 24px; background: rgba(10, 35, 24, 0.72);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   position: sticky; top: 0; z-index: 10;
 }
 
@@ -283,7 +285,7 @@ td.actions { white-space: nowrap; text-align: right; }
 
 /* ------------------------------------------------------------------- login */
 
-.login-page { display: grid; place-items: center; min-height: 100vh; padding: 24px; background: var(--bg); }
+.login-page { display: grid; place-items: center; min-height: 100vh; padding: 24px; }
 .login-card { width: 100%; max-width: 380px; }
 
 /* ---------------------------------------------------------------- responsive */
