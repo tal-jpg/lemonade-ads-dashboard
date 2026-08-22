@@ -87,7 +87,11 @@ export ADMIN_EMAIL=you@example.com
 npx ts-node scripts/seed.ts
 ```
 
-Full walkthrough: **[docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md)**.
+No accounts yet? Stage 0 of
+**[docs/ACCOUNTS_AND_SETUP.md](docs/ACCOUNTS_AND_SETUP.md)** runs the whole backend
+locally on the emulator suite for free. That document is also the account-by-account
+walkthrough — which login gives you what, and where each credential goes.
+Firebase specifics: **[docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md)**.
 
 ---
 
@@ -235,6 +239,7 @@ a personal trade journal, broker integration, referrals and multi-language.
 
 | Document | Covers |
 |---|---|
+| [docs/ACCOUNTS_AND_SETUP.md](docs/ACCOUNTS_AND_SETUP.md) | **Start here.** Every account you need, what each credential is and which file it goes in |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Folder structure, layering, state, security model, Phase 2 seams |
 | [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | Every Firestore collection, field and index |
 | [docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md) | Project creation, config files, rules, functions, secrets, seeding |

@@ -89,17 +89,24 @@ building without payments for now.
 2. Create a key with the **App Manager** role; download the `.p8` (once only)
 3. Note the **Issuer ID** and **Key ID**
 
+The private key is a Secret Manager secret:
+
 ```bash
 firebase functions:secrets:set APPLE_PRIVATE_KEY   # paste the whole .p8 contents
-
-firebase functions:config:set \
-  apple_issuer_id="YOUR_ISSUER_ID" \
-  apple_key_id="YOUR_KEY_ID" \
-  apple_bundle_id="com.forextradehub.app"
 ```
 
-Or set `APPLE_ISSUER_ID`, `APPLE_KEY_ID`, `APPLE_BUNDLE_ID` as function params in
-the console — the code reads them via `defineString`.
+The rest are v2 function **params** (`firebase-functions/params`), so they come
+from a dotenv file next to the functions — `backend/functions/.env.<project-id>`,
+which is gitignored — or from the CLI prompt at deploy time:
+
+```ini
+APPLE_ISSUER_ID=YOUR_ISSUER_ID
+APPLE_KEY_ID=YOUR_KEY_ID
+APPLE_BUNDLE_ID=com.forextradehub.app
+ANDROID_PACKAGE_NAME=com.forextradehub.app
+```
+
+The legacy `firebase functions:config:set` store is **not** what this code reads.
 
 **Server notifications:** App Store Connect → your app → **App Information →
 App Store Server Notifications**. Set the production and sandbox URLs to:
