@@ -163,23 +163,23 @@ export function Dashboard() {
             <AreaChart data={growth} margin={{ top: 4, right: 8, left: -22, bottom: 0 }}>
               <defs>
                 <linearGradient id="growthFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2AD679" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="#2AD679" stopOpacity={0} />
+                  <stop offset="0%" stopColor="#3D7BFF" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="#3D7BFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#1B4A30" vertical={false} />
-              <XAxis dataKey="day" stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+              <CartesianGrid stroke="#1C2650" vertical={false} />
+              <XAxis dataKey="day" stroke="#63709F" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="#63709F" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
               <Tooltip
                 contentStyle={{
-                  background: '#143826',
-                  border: '1px solid #2A6242',
+                  background: '#1A2450',
+                  border: '1px solid #31407E',
                   borderRadius: 10,
                   fontSize: 12,
                 }}
-                labelStyle={{ color: '#A9C4B2' }}
+                labelStyle={{ color: '#9AA7CE' }}
               />
-              <Area type="monotone" dataKey="count" stroke="#2AD679" strokeWidth={2} fill="url(#growthFill)" />
+              <Area type="monotone" dataKey="count" stroke="#3D7BFF" strokeWidth={2} fill="url(#growthFill)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -191,20 +191,20 @@ export function Dashboard() {
           ) : (
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={performance} margin={{ top: 4, right: 8, left: -22, bottom: 0 }}>
-                <CartesianGrid stroke="#1B4A30" vertical={false} />
-                <XAxis dataKey="day" stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#6F8F7B" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                <CartesianGrid stroke="#1C2650" vertical={false} />
+                <XAxis dataKey="day" stroke="#63709F" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#63709F" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
-                    background: '#143826',
-                    border: '1px solid #2A6242',
+                    background: '#1A2450',
+                    border: '1px solid #31407E',
                     borderRadius: 10,
                     fontSize: 12,
                   }}
                   cursor={{ fill: 'rgba(255,255,255,0.04)' }}
                 />
-                <Bar dataKey="wins" stackId="r" fill="#2AD679" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="losses" stackId="r" fill="#F6465D" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="wins" stackId="r" fill="#3D7BFF" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="losses" stackId="r" fill="#FF4D67" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}

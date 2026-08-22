@@ -56,7 +56,7 @@ export function PremiumLock({
       <LinearGradient
         colors={
           theme.isDark
-            ? ['rgba(7,20,13,0.55)', 'rgba(7,20,13,0.92)']
+            ? ['rgba(8,12,30,0.55)', 'rgba(8,12,30,0.92)']
             : ['rgba(255,255,255,0.55)', 'rgba(255,255,255,0.94)']
         }
         style={StyleSheet.absoluteFill}

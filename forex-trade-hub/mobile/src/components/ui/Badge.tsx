@@ -34,7 +34,7 @@ export function Badge({ label, tone = 'neutral', icon, solid = false, style }: B
     ? tone === 'neutral'
       ? theme.colors.textPrimary
       : theme.isDark
-        ? '#06170E'
+        ? '#0A0F26'
         : '#FFFFFF'
     : fg;
 
