@@ -57,7 +57,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
           {
             backgroundColor: theme.colors.surfaceAlt,
             borderColor,
-            borderRadius: theme.radius.md,
+            borderRadius: theme.radius.sm,
             borderWidth: focused || error ? theme.borderWidth.thick : theme.borderWidth.hairline,
             paddingHorizontal: theme.spacing.md,
             minHeight: rest.multiline ? 96 : 50,

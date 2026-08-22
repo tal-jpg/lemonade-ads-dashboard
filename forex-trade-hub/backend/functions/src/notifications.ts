@@ -87,7 +87,7 @@ export async function broadcast(
       data: toDataPayload(payload),
       android: {
         priority: 'high',
-        notification: { channelId: CHANNEL[payload.type], color: '#3D7BFF' },
+        notification: { channelId: CHANNEL[payload.type], color: '#00B8E6' },
       },
       apns: {
         payload: { aps: { sound: 'default', badge: 1, 'mutable-content': 1 } },

@@ -10,6 +10,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../theme/ThemeProvider';
+import { AmbientGlow } from './AmbientGlow';
 
 export type ScreenProps = {
   children: React.ReactNode;
@@ -69,6 +70,7 @@ export function Screen({
           style={StyleSheet.absoluteFill}
           pointerEvents="none"
         />
+        <AmbientGlow />
         <ScrollView
           contentContainerStyle={[inner, { paddingBottom: paddingBottom + theme.spacing.xl }]}
           showsVerticalScrollIndicator={false}
@@ -103,6 +105,7 @@ export function Screen({
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       />
+      <AmbientGlow />
       <View style={[styles.flex, inner]}>{children}</View>
     </View>
   );

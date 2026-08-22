@@ -114,7 +114,7 @@ export function Button({
         styles.base,
         {
           height,
-          borderRadius: theme.radius.md,
+          borderRadius: theme.radius.sm,
           paddingHorizontal: size === 'sm' ? theme.spacing.base : theme.spacing.lg,
           opacity: isDisabled ? 0.45 : 1,
           transform: [{ scale: pressed && !isDisabled ? 0.978 : 1 }],
@@ -133,7 +133,7 @@ export function Button({
           colors={gradientColors as unknown as [string, string]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[StyleSheet.absoluteFill, { borderRadius: theme.radius.md }]}
+          style={[StyleSheet.absoluteFill, { borderRadius: theme.radius.sm }]}
         />
       ) : null}
       {content}
