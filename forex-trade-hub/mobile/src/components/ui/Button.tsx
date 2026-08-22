@@ -69,12 +69,17 @@ export function Button({
   const palette = {
     primary: { bg: theme.colors.primary, fg: theme.colors.onPrimary, border: 'transparent' },
     secondary: {
-      bg: theme.colors.surfaceAlt,
+      // Lifted a step and outlined in the accent so it reads as a control,
+      // not as a patch of background.
+      bg: theme.colors.surfaceHigh,
       fg: theme.colors.textPrimary,
-      border: theme.colors.border,
+      border: theme.colors.borderStrong,
     },
-    ghost: { bg: 'transparent', fg: theme.colors.textSecondary, border: 'transparent' },
-    danger: { bg: theme.colors.loss, fg: '#FFFFFF', border: 'transparent' },
+    ghost: { bg: 'transparent', fg: theme.colors.textPrimary, border: 'transparent' },
+    // A deeper red than the semantic `loss` token: the bright one is tuned to
+    // read as text on a dark surface, where it only reaches 3.8:1 behind a
+    // white label. This fill clears 4.8:1.
+    danger: { bg: '#DC2626', fg: '#FFFFFF', border: 'transparent' },
     premium: { bg: theme.colors.premium, fg: '#1A1200', border: 'transparent' },
   }[variant];
 
@@ -122,9 +127,11 @@ export function Button({
         fullWidth && styles.fullWidth,
         !useGradient && {
           backgroundColor: palette.bg,
-          borderWidth: variant === 'secondary' ? theme.borderWidth.hairline : 0,
+          borderWidth: variant === 'secondary' ? theme.borderWidth.thick : 0,
           borderColor: palette.border,
         },
+        // Filled buttons sit above the surface; ghost stays flat.
+        variant !== 'ghost' && !isDisabled && theme.elevation.card,
         style,
       ]}
     >

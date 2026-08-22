@@ -59,7 +59,7 @@ export const typography: Record<TypographyVariant, TextStyle> = {
     letterSpacing: 0.9,
     textTransform: 'uppercase',
   },
-  button: { fontFamily: fontFamily.semibold, fontSize: 15, lineHeight: 20, letterSpacing: 0.1 },
+  button: { fontFamily: fontFamily.bold, fontSize: 15, lineHeight: 20, letterSpacing: 0.2 },
 
   // Numeric styles — always monospaced so columns line up.
   priceLg: { fontFamily: fontFamily.monoBold, fontSize: 26, lineHeight: 32, letterSpacing: -0.5 },

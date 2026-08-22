@@ -92,7 +92,9 @@ export const darkColors: ColorPalette = {
   primary: '#00B8E6',
   primaryDark: '#0091BA',
   primaryMuted: 'rgba(0, 184, 230, 0.14)',
-  onPrimary: '#FFFFFF',
+  // The brand fill is a bright cyan, so its label is near-black ink:
+  // white on #00D4FF measures 1.8:1, this measures 10.9:1.
+  onPrimary: '#021019',
 
   secondary: '#8B5CF6',
   secondaryMuted: 'rgba(108, 59, 255, 0.16)',
@@ -147,8 +149,8 @@ export const lightColors: ColorPalette = {
   borderStrong: 'rgba(0, 145, 186, 0.40)',
   divider: 'rgba(71, 100, 130, 0.10)',
 
-  primary: '#0284A8',
-  primaryDark: '#026B89',
+  primary: '#02697F',
+  primaryDark: '#01566A',
   primaryMuted: 'rgba(2, 132, 168, 0.12)',
   onPrimary: '#FFFFFF',
 
