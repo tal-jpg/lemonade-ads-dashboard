@@ -291,13 +291,15 @@ def _deliver(event: Event, rule: Rule, token: str) -> None:
         if rule.document_url:
             label = rule.document_name or "Here's the link"
             body = f"{text}\n\n{label}: {rule.document_url}"
-        response = send_private_reply(account.account_id, event.comment_id or "", body, token)
+        response = send_private_reply(
+            account.account_id, event.comment_id or "", body, token, login=account.login
+        )
         # The Send API hands back the DM-scoped user id, which is what any
         # follow-up message has to be addressed to.
         recipient_id = str(response.get("recipient_id") or "") or None
     else:
         recipient_id = event.user_id
-        send_message(account.account_id, recipient_id, text, token)
+        send_message(account.account_id, recipient_id, text, token, login=account.login)
         if rule.document_url:
             send_document(
                 platform=account.platform,
@@ -306,11 +308,14 @@ def _deliver(event: Event, rule: Rule, token: str) -> None:
                 url=rule.document_url,
                 name=rule.document_name,
                 token=token,
+                login=account.login,
             )
 
     if rule.follow_up and recipient_id:
         follow_up = render(rule.follow_up, username=event.username, name=event.name)
-        send_message(account.account_id, recipient_id, follow_up, token)
+        send_message(
+            account.account_id, recipient_id, follow_up, token, login=account.login
+        )
 
     if rule.public_reply and event.comment_id:
         # Best-effort: the DM is the deliverable, so a failed public nudge
@@ -320,6 +325,7 @@ def _deliver(event: Event, rule: Rule, token: str) -> None:
                 event.comment_id,
                 render(rule.public_reply, username=event.username, name=event.name),
                 token,
+                login=account.login,
             )
         except SendError as exc:
             log.warning("public reply failed for comment %s: %s", event.comment_id, exc)

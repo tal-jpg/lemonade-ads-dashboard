@@ -24,6 +24,9 @@ RULES_PATH = Path(os.environ.get("DM_BOT_RULES", Path(__file__).parent / "rules.
 RULES_JSON_ENV = "DM_BOT_RULES_JSON"
 
 MATCH_MODES = ("exact", "contains", "starts_with", "regex", "any")
+# Which Meta auth model the account authorised through. Decides the API host
+# and the token type; see senders.GRAPH_HOSTS.
+LOGIN_MODES = ("facebook_login", "instagram_login")
 TRIGGERS = ("comment", "dm")
 
 
@@ -40,6 +43,7 @@ class Account:
     account_id: str  # IG user id, or FB page id
     page_id: str  # FB page id backing the IG account (same as account_id for FB)
     token_env: str
+    login: str = "facebook_login"
     enabled: bool = True
 
     @property
@@ -187,6 +191,11 @@ def parse_rules(raw: dict[str, Any]) -> RuleSet:
             raise RulesError(
                 f"account '{entry['id']}': platform must be 'instagram' or 'facebook'"
             )
+        login = entry.get("login", "facebook_login")
+        if login not in LOGIN_MODES:
+            raise RulesError(
+                f"account '{entry['id']}': login must be one of {', '.join(LOGIN_MODES)}"
+            )
         if entry["id"] in accounts:
             raise RulesError(f"duplicate account id '{entry['id']}'")
         accounts[entry["id"]] = Account(
@@ -195,6 +204,7 @@ def parse_rules(raw: dict[str, Any]) -> RuleSet:
             account_id=str(entry["account_id"]),
             page_id=str(entry.get("page_id") or entry["account_id"]),
             token_env=entry["token_env"],
+            login=login,
             enabled=bool(entry.get("enabled", True)),
         )
     if not accounts:

@@ -272,24 +272,26 @@ class FakeSender:
         self.calls: list[tuple] = []
         self.error = error
 
-    def private_reply(self, sender_id, comment_id, text, token):
-        self.calls.append(("private_reply", sender_id, comment_id, text))
+    def private_reply(self, sender_id, comment_id, text, token, *, login="facebook_login"):
+        self.calls.append(("private_reply", sender_id, comment_id, text, login))
         if self.error:
             raise self.error
         return {"recipient_id": "dm_user_1", "message_id": "mid_1"}
 
-    def message(self, sender_id, recipient_id, text, token):
-        self.calls.append(("message", sender_id, recipient_id, text))
+    def message(self, sender_id, recipient_id, text, token, *, login="facebook_login"):
+        self.calls.append(("message", sender_id, recipient_id, text, login))
         if self.error:
             raise self.error
         return {"message_id": "mid_2"}
 
-    def document(self, *, platform, sender_id, recipient_id, url, name, token):
-        self.calls.append(("document", platform, recipient_id, url))
+    def document(
+        self, *, platform, sender_id, recipient_id, url, name, token, login="facebook_login"
+    ):
+        self.calls.append(("document", platform, recipient_id, url, login))
         return {"message_id": "mid_3"}
 
-    def comment_reply(self, comment_id, text, token):
-        self.calls.append(("comment_reply", comment_id, text))
+    def comment_reply(self, comment_id, text, token, *, login="facebook_login"):
+        self.calls.append(("comment_reply", comment_id, text, login))
         return {"id": "reply_1"}
 
 
@@ -390,12 +392,111 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(store.recent_deliveries(1)[0]["status"], "dry_run")
 
     def test_public_reply_failure_does_not_fail_the_delivery(self):
-        def boom(comment_id, text, token):
+        def boom(comment_id, text, token, *, login="facebook_login"):
             raise senders.SendError("comment deleted", retryable=False)
 
         dm_app.reply_to_comment = boom
         dm_app.handle_event(self.comment_event())
         self.assertEqual(store.recent_deliveries(1)[0]["status"], "sent")
+
+
+class InstagramLoginTests(unittest.TestCase):
+    """Meta's Instagram-login auth model talks to a different host than the
+    Facebook-login one; getting this wrong 404s every send."""
+
+    def test_host_per_login_mode(self):
+        self.assertIn("graph.facebook.com", senders.base_url("facebook_login"))
+        self.assertIn("graph.instagram.com", senders.base_url("instagram_login"))
+        # An unknown value must not build a bogus URL.
+        self.assertIn("graph.facebook.com", senders.base_url("nonsense"))
+
+    def test_login_mode_is_read_from_config(self):
+        rs = rules_mod.parse_rules(
+            {
+                "accounts": [
+                    {
+                        "id": "ig",
+                        "platform": "instagram",
+                        "account_id": IG_ACCOUNT_ID,
+                        "token_env": "TEST_TOKEN",
+                        "login": "instagram_login",
+                    }
+                ],
+                "rules": [
+                    {
+                        "id": "guide",
+                        "account_id": "ig",
+                        "match": {"mode": "contains", "keywords": ["guide"]},
+                        "dm": {"text": "hi"},
+                    }
+                ],
+            }
+        )
+        self.assertEqual(rs.accounts["ig"].login, "instagram_login")
+        with self.assertRaises(rules_mod.RulesError):
+            rules_mod.parse_rules(
+                {
+                    "accounts": [
+                        {
+                            "id": "ig",
+                            "platform": "instagram",
+                            "account_id": IG_ACCOUNT_ID,
+                            "token_env": "TEST_TOKEN",
+                            "login": "typo_login",
+                        }
+                    ],
+                    "rules": [],
+                }
+            )
+
+    def test_login_mode_reaches_the_sender(self):
+        """The whole point: an instagram_login account must not send to
+        graph.facebook.com."""
+        store.DB_PATH = Path(_TMP) / "iglogin.db"
+        store.init_db()
+        os.environ["TEST_TOKEN"] = "fake_token"
+        dm_app.DRY_RUN = False
+        dm_app.RULESET = rules_mod.parse_rules(
+            {
+                "accounts": [
+                    {
+                        "id": "ig",
+                        "platform": "instagram",
+                        "account_id": IG_ACCOUNT_ID,
+                        "token_env": "TEST_TOKEN",
+                        "login": "instagram_login",
+                    }
+                ],
+                "rules": [
+                    {
+                        "id": "guide",
+                        "account_id": "ig",
+                        "match": {"mode": "contains", "keywords": ["guide"]},
+                        "dm": {"text": "hi"},
+                    }
+                ],
+            }
+        )
+        fake = FakeSender()
+        dm_app.send_private_reply = fake.private_reply
+        dm_app.send_message = fake.message
+        dm_app.send_document = fake.document
+        dm_app.reply_to_comment = fake.comment_reply
+
+        dm_app.handle_event(
+            dm_app.Event(
+                account=dm_app.RULESET.accounts["ig"],
+                trigger="comment",
+                text="guide",
+                user_id="u1",
+                username="someone",
+                name=None,
+                event_key="comment:iglogin1",
+                comment_id="c1",
+            )
+        )
+        self.assertEqual(fake.calls[0][0], "private_reply")
+        self.assertEqual(fake.calls[0][4], "instagram_login")
 
 
 class HttpTests(unittest.TestCase):

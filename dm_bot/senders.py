@@ -21,8 +21,25 @@ from typing import Any
 import requests
 
 API_VERSION = os.environ.get("META_API_VERSION", "v21.0")
-BASE_URL = f"https://graph.facebook.com/{API_VERSION}"
+
+# Meta has two auth models for Instagram, and they do not share a host.
+#   facebook_login    — the account is reached through its linked Page, with a
+#                       Page token, on graph.facebook.com.
+#   instagram_login   — the Instagram account authorises directly and its own
+#                       token is used, on graph.instagram.com.
+# Which one applies is set per account in the config, because an install can
+# legitimately have one of each.
+GRAPH_HOSTS = {
+    "facebook_login": "https://graph.facebook.com",
+    "instagram_login": "https://graph.instagram.com",
+}
+DEFAULT_LOGIN = "facebook_login"
+BASE_URL = f"{GRAPH_HOSTS[DEFAULT_LOGIN]}/{API_VERSION}"
 TIMEOUT = 20
+
+
+def base_url(login: str = DEFAULT_LOGIN) -> str:
+    return f"{GRAPH_HOSTS.get(login, GRAPH_HOSTS[DEFAULT_LOGIN])}/{API_VERSION}"
 
 # Meta error codes worth retrying: transient API failures and rate limits.
 # Everything else (permissions, closed messaging window, blocked user) is
@@ -39,8 +56,10 @@ class SendError(RuntimeError):
         self.code = code
 
 
-def _post(path: str, token: str, payload: dict[str, Any]) -> dict[str, Any]:
-    url = f"{BASE_URL}/{path}"
+def _post(
+    path: str, token: str, payload: dict[str, Any], *, login: str = DEFAULT_LOGIN
+) -> dict[str, Any]:
+    url = f"{base_url(login)}/{path}"
     try:
         resp = requests.post(
             url, params={"access_token": token}, json=payload, timeout=TIMEOUT
@@ -72,7 +91,7 @@ def _post(path: str, token: str, payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def send_private_reply(
-    sender_id: str, comment_id: str, text: str, token: str
+    sender_id: str, comment_id: str, text: str, token: str, *, login: str = DEFAULT_LOGIN
 ) -> dict[str, Any]:
     """Open a DM in response to a comment.
 
@@ -84,10 +103,13 @@ def send_private_reply(
         f"{sender_id}/messages",
         token,
         {"recipient": {"comment_id": comment_id}, "message": {"text": text}},
+        login=login,
     )
 
 
-def send_message(sender_id: str, recipient_id: str, text: str, token: str) -> dict[str, Any]:
+def send_message(
+    sender_id: str, recipient_id: str, text: str, token: str, *, login: str = DEFAULT_LOGIN
+) -> dict[str, Any]:
     """Send text into an existing DM thread (inside the 24h messaging window)."""
     return _post(
         f"{sender_id}/messages",
@@ -97,11 +119,12 @@ def send_message(sender_id: str, recipient_id: str, text: str, token: str) -> di
             "messaging_type": "RESPONSE",
             "message": {"text": text},
         },
+        login=login,
     )
 
 
 def send_file_attachment(
-    sender_id: str, recipient_id: str, url: str, token: str
+    sender_id: str, recipient_id: str, url: str, token: str, *, login: str = DEFAULT_LOGIN
 ) -> dict[str, Any]:
     """Messenger-only: attach an actual file to the DM."""
     return _post(
@@ -117,6 +140,7 @@ def send_file_attachment(
                 }
             },
         },
+        login=login,
     )
 
 
@@ -128,6 +152,7 @@ def send_document(
     url: str,
     name: str | None,
     token: str,
+    login: str = DEFAULT_LOGIN,
 ) -> dict[str, Any]:
     """Deliver the document, using the best method the platform supports.
 
@@ -138,14 +163,16 @@ def send_document(
     label = name or "your document"
     if platform == "facebook":
         try:
-            return send_file_attachment(sender_id, recipient_id, url, token)
+            return send_file_attachment(sender_id, recipient_id, url, token, login=login)
         except SendError as exc:
             if exc.retryable:
                 raise
             # Fall through to the link so the person still gets the doc.
-    return send_message(sender_id, recipient_id, f"{label}: {url}", token)
+    return send_message(sender_id, recipient_id, f"{label}: {url}", token, login=login)
 
 
-def reply_to_comment(comment_id: str, text: str, token: str) -> dict[str, Any]:
+def reply_to_comment(
+    comment_id: str, text: str, token: str, *, login: str = DEFAULT_LOGIN
+) -> dict[str, Any]:
     """Public reply under the original comment."""
-    return _post(f"{comment_id}/replies", token, {"message": text})
+    return _post(f"{comment_id}/replies", token, {"message": text}, login=login)
