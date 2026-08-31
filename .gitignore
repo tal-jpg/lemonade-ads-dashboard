@@ -3,6 +3,12 @@
 .env.local
 .env.*.local
 auth/.env
+dm_bot/.env
+
+# DM bot local state — rules.json can name real accounts/posts; data/ holds
+# the dedup + delivery log DB
+dm_bot/rules.json
+dm_bot/data/
 
 # Python
 __pycache__/

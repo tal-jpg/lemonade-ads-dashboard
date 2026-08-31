@@ -1,0 +1,82 @@
+{
+  "_comment": "Copy to rules.json and edit. Never put tokens in here — only the NAME of the .env variable holding the token (token_env).",
+
+  "accounts": [
+    {
+      "id": "lemonade_ig",
+      "platform": "instagram",
+      "account_id": "17841400000000000",
+      "page_id": "100000000000000",
+      "token_env": "IG_PAGE_ACCESS_TOKEN",
+      "enabled": true
+    },
+    {
+      "id": "lemonade_fb",
+      "platform": "facebook",
+      "account_id": "100000000000000",
+      "token_env": "FB_PAGE_ACCESS_TOKEN",
+      "enabled": false
+    }
+  ],
+
+  "rules": [
+    {
+      "id": "media_kit",
+      "account_id": "lemonade_ig",
+      "enabled": true,
+      "priority": 10,
+      "triggers": ["comment", "dm"],
+      "match": {
+        "mode": "contains",
+        "keywords": ["GUIDE", "מדריך"],
+        "case_sensitive": false
+      },
+      "media_ids": [],
+      "dm": {
+        "text": "Hey {username}! Thanks for commenting 🙌 Here's the guide I promised:",
+        "document": {
+          "url": "https://example.com/lemonade-ads-guide.pdf",
+          "name": "The Lemonade Ads Growth Guide (PDF)"
+        },
+        "follow_up": "If you want us to look at your account, just reply here and I'll take a look."
+      },
+      "public_reply": "Just sent it to your DMs 📩",
+      "once_per_user": true
+    },
+    {
+      "id": "pricing_only_on_the_launch_post",
+      "account_id": "lemonade_ig",
+      "enabled": false,
+      "priority": 20,
+      "triggers": ["comment"],
+      "match": {
+        "mode": "exact",
+        "keywords": ["PRICING"]
+      },
+      "media_ids": ["17900000000000000"],
+      "dm": {
+        "text": "Here's our full pricing breakdown 👇",
+        "document": {
+          "url": "https://example.com/pricing.pdf",
+          "name": "Pricing (PDF)"
+        }
+      },
+      "once_per_user": false
+    },
+    {
+      "id": "dm_catch_all",
+      "account_id": "lemonade_ig",
+      "enabled": false,
+      "priority": -10,
+      "triggers": ["dm"],
+      "match": {
+        "mode": "any",
+        "keywords": []
+      },
+      "dm": {
+        "text": "Thanks for the message! A human from the team will get back to you shortly."
+      },
+      "once_per_user": true
+    }
+  ]
+}
