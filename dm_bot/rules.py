@@ -1,8 +1,10 @@
 """Keyword rule engine — the ManyChat-style "if they say X, DM them Y" layer.
 
-Rules live in dm_bot/rules.json (see rules.example.json). This module loads
-them, validates the shape, and decides which rule an incoming comment or DM
-should fire. It performs no network I/O, so it is cheap to unit-test.
+Rules live in dm_bot/rules.json (see rules.example.json), or in the
+DM_BOT_RULES_JSON environment variable when running somewhere without a
+writable checkout. This module loads them, validates the shape, and decides
+which rule an incoming comment or DM should fire. It performs no network I/O,
+so it is cheap to unit-test.
 """
 from __future__ import annotations
 
@@ -14,6 +16,12 @@ from pathlib import Path
 from typing import Any
 
 RULES_PATH = Path(os.environ.get("DM_BOT_RULES", Path(__file__).parent / "rules.json"))
+
+# Containers have no rules.json — it is gitignored, since it names real
+# accounts and posts. On a host like Railway the whole config is handed in
+# through this variable instead, so the rules live with the deployment
+# rather than in the image.
+RULES_JSON_ENV = "DM_BOT_RULES_JSON"
 
 MATCH_MODES = ("exact", "contains", "starts_with", "regex", "any")
 TRIGGERS = ("comment", "dm")
@@ -147,11 +155,20 @@ class RuleSet:
 
 def load_rules(path: Path | str | None = None) -> RuleSet:
     """Read and validate rules.json. Raises RulesError on a bad config."""
+    if path is None:
+        inline = os.environ.get(RULES_JSON_ENV, "").strip()
+        if inline:
+            try:
+                return parse_rules(json.loads(inline))
+            except json.JSONDecodeError as exc:
+                raise RulesError(f"{RULES_JSON_ENV} is not valid JSON: {exc}") from exc
+
     rules_path = Path(path) if path else RULES_PATH
     if not rules_path.exists():
         raise RulesError(
             f"{rules_path} not found. Copy dm_bot/rules.example.json to "
-            f"dm_bot/rules.json and edit it."
+            f"dm_bot/rules.json and edit it, or set {RULES_JSON_ENV} to the "
+            f"config itself (how the deployed service is configured)."
         )
     try:
         raw = json.loads(rules_path.read_text(encoding="utf-8"))

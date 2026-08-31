@@ -142,6 +142,47 @@ class MatchingTests(unittest.TestCase):
     def test_example_rules_file_is_valid(self):
         rules_mod.load_rules(Path(__file__).parent / "rules.example.json")
 
+    def test_rules_can_come_from_the_environment(self):
+        """How the deployed service is configured — there is no rules.json in
+        the container."""
+        config = json.dumps(
+            {
+                "accounts": [
+                    {
+                        "id": "ig",
+                        "platform": "instagram",
+                        "account_id": IG_ACCOUNT_ID,
+                        "token_env": "TEST_TOKEN",
+                    }
+                ],
+                "rules": [
+                    {
+                        "id": "from_env",
+                        "account_id": "ig",
+                        "match": {"mode": "contains", "keywords": ["guide"]},
+                        "dm": {"text": "hi"},
+                    }
+                ],
+            }
+        )
+        os.environ[rules_mod.RULES_JSON_ENV] = config
+        try:
+            rs = rules_mod.load_rules()
+            self.assertEqual([r.id for r in rs.rules], ["from_env"])
+            # An explicit path still wins, so tests and the CLI are unaffected.
+            from_file = rules_mod.load_rules(Path(__file__).parent / "rules.example.json")
+            self.assertNotIn("from_env", [r.id for r in from_file.rules])
+        finally:
+            del os.environ[rules_mod.RULES_JSON_ENV]
+
+    def test_bad_env_rules_are_rejected(self):
+        os.environ[rules_mod.RULES_JSON_ENV] = "{not json"
+        try:
+            with self.assertRaises(rules_mod.RulesError):
+                rules_mod.load_rules()
+        finally:
+            del os.environ[rules_mod.RULES_JSON_ENV]
+
 
 class WebhookParsingTests(unittest.TestCase):
     def setUp(self):
